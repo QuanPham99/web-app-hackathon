@@ -1,11 +1,49 @@
+'use client';
 import React from "react";
-import Image from "next/image";
-import GoogleIcon from '@mui/icons-material/Google';
-import { Button, Typography,Avatar,TextField,Grid,FormControlLabel,Checkbox,Link,Container } from "@mui/material";
+import { Button, Typography,Avatar,TextField,Grid,FormControlLabel,Checkbox,Link,Container,ThemeProvider} from "@mui/material";
 import { LockOutlined } from "@mui/icons-material";
-import { pink,red } from '@mui/material/colors'
+import { pink,red,white,black } from '@mui/material/colors';
+import {createTheme} from "@mui/material";
 import styles from "./signup.module.css";
+
+// const useStyles = makeStyles(theme => ({
+//   "@global": {
+//     body: {
+//       backgroundColor: theme.palette.common.white
+//     }
+//   },
+//   paper: {
+//     marginTop: theme.spacing(8),
+//     display: "flex",
+//     flexDirection: "column",
+//     alignItems: "center"
+//   },
+//   avatar: {
+//     margin: theme.spacing(1),
+//     backgroundColor: theme.palette.secondary.main
+//   },
+//   form: {
+//     width: "100%", // Fix IE 11 issue.
+//     marginTop: theme.spacing(3)
+//   },
+//   submit: {
+//     margin: theme.spacing(3, 0, 2)
+//   }
+// }));
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#FFFFFF',
+    },
+    secondary: {
+      main: red[500],
+    },
+  },
+
+});
+
 function SignUpPage(){
+
     return <div className={styles.signup}>
         <Container>
         <center>
@@ -71,14 +109,18 @@ function SignUpPage(){
               />
             </Grid>
         </Grid>
+        <ThemeProvider theme={theme}>
         <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
+            sx = {{border:'2px black solid', borderRadius:'24px'}}
+            // style={{color:'white', backgroundColor:'black'}}
           >
             Sign Up
         </Button>
+        </ThemeProvider>
         <Grid container justify="flex-end" style={{paddingTop:'16px',paddingLeft:'54%'}}>
         <Grid item > 
             <Link href="/" variant="body2" display='flex'>
