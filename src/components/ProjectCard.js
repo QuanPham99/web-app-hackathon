@@ -13,7 +13,7 @@ const descriptionMaxLine = 3;
 
 function ProjectCard({ projectDetail }) {
   return (
-    <Card sx={{ borderRadius: 8, p: 1 }} elevation={3}>
+    <Card sx={{ borderRadius: 8, p: 1 }} elevation={1}>
       <CardHeader
         sx={{ mb: -3 }}
         avatar={

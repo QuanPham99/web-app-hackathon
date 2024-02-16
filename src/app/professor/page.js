@@ -29,7 +29,7 @@ async function Page() {
 
   return (
     <div style={{ width: '100%' }}>
-      <Box sx={{ marginLeft: '300px', px: 4 }}>
+      <Box sx={{ marginLeft: '300px' }}>
         <Stack spacing={2}>
           {projects.map((project, index) => (
             <ProjectCard key={index} projectDetail={project} />

@@ -19,7 +19,7 @@ function ProjectFilter({ title, fetchdata_url, isMultiChoice = false }) {
   ];
 
   return (
-    <Accordion>
+    <Accordion elevation={0}>
       <AccordionSummary
         expandIcon={
           <MdOutlineExpandMore style={{ color: 'black', fontSize: '24px' }} />
