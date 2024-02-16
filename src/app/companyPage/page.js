@@ -81,42 +81,6 @@ function CompanyPage() {
               </Container>
             </Grid>
           </Grid>
-          {/* <Grid container spacing={0}>
-            <Grid item>
-              <Typography
-                variant='body1'
-                component='h1'
-                style={{ paddingLeft: "30px", paddingTop: "18px" }}
-              >
-                Logo
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography
-                variant='body1'
-                component='h1'
-                style={{ padding: "18px" }}
-              >
-                Web Name
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography
-                variant='body1'
-                component='h1'
-                style={{ paddingLeft: "30px", paddingTop: "18px" }}
-              >
-                Current Projects
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Container style={{ paddingTop: "12px" }}>
-                <Button variant='contained' style={{ borderRadius: "24px" }}>
-                  Add Project
-                </Button>
-              </Container>
-            </Grid>
-          </Grid> */}
         </AppBar>
       </ThemeProvider>
       <div>
