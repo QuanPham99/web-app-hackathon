@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   AppBar,
   Avatar,
@@ -7,8 +7,8 @@ import {
   Container,
   Toolbar,
   Typography,
-} from "@mui/material";
-import Link from "next/link";
+} from '@mui/material';
+import Link from 'next/link';
 
 function NavBar({ navOptions = [], optionComponents = [] }) {
   return (
@@ -18,15 +18,15 @@ function NavBar({ navOptions = [], optionComponents = [] }) {
           <Typography variant='body2' fontWeight='bold'>
             Logo
           </Typography>
-          <Typography sx={{ marginLeft: "8px" }} fontWeight='bold' variant='h6'>
+          <Typography sx={{ marginLeft: '8px' }} fontWeight='bold' variant='h6'>
             Web Name
           </Typography>
 
           <Box
             sx={{
               flexGrow: 1,
-              display: { xs: "none", md: "flex" },
-              justifyContent: "space-evenly",
+              display: { xs: 'none', md: 'flex' },
+              justifyContent: 'space-evenly',
             }}
           >
             {navOptions.map((option, index) => (
@@ -34,16 +34,16 @@ function NavBar({ navOptions = [], optionComponents = [] }) {
                 key={index}
                 href={option.url}
                 style={{
-                  textDecoration: "none",
-                  color: "black",
+                  textDecoration: 'none',
+                  color: 'black',
                 }}
               >
                 <Typography variant='subtitle'>{option.name}</Typography>
               </Link>
             ))}
-            {optionComponents}
           </Box>
-          <Avatar alt='Professor Avatar' sx={{ bgcolor: " black" }}>
+          {optionComponents}
+          <Avatar alt='Professor Avatar' sx={{ bgcolor: ' black' }}>
             P
           </Avatar>
         </Toolbar>
