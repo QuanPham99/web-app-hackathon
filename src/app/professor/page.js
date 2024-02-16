@@ -1,6 +1,7 @@
 import ProjectCard from '@/components/ProjectCard';
+import ProjectFilter from '@/components/filter/ProjectFilter';
 import { Container, Stack } from '@mui/material';
-import React from 'react';
+import { React } from 'react';
 
 const projectDetail = {
   company_name: 'Google',
@@ -16,7 +17,15 @@ const projectDetail = {
 
 const projects = [projectDetail, projectDetail, projectDetail];
 
-function Page() {
+async function Page() {
+  // get company id from session company_id
+  const loadData = async () => {
+    const result = fetch('/api/get_company', {
+      method: 'GET',
+      par,
+    });
+  };
+
   return (
     <div>
       <Container>
@@ -26,6 +35,9 @@ function Page() {
           ))}
         </Stack>
       </Container>
+
+      <ProjectFilter title='Topic' isMultiChoice={true} />
+      <ProjectFilter title='Company'  />
     </div>
   );
 }

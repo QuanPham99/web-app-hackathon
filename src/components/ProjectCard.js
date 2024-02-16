@@ -9,6 +9,8 @@ import {
 import { HiOutlineBookmark } from 'react-icons/hi';
 import React from 'react';
 
+const descriptionMaxLine = 3;
+
 function ProjectCard({ projectDetail }) {
   return (
     <Card sx={{ borderRadius: 8, p: 1 }} elevation={3}>
@@ -44,7 +46,7 @@ function ProjectCard({ projectDetail }) {
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             display: '-webkit-box',
-            WebkitLineClamp: '5',
+            WebkitLineClamp: `${descriptionMaxLine}`,
             WebkitBoxOrient: 'vertical',
           }}
         >
