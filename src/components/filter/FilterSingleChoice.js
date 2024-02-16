@@ -4,14 +4,15 @@ import React from 'react';
 function FilterSingleChoice({ options }) {
   return (
     <RadioGroup>
-      {options.map((option) => (
+      {options.map((option, index) => (
         <FormControlLabel
+          key={index}
           label={
             <Typography variant='body2'>
               {`${option.name} (${option.count})`}
             </Typography>
           }
-          control={<Radio />}
+          control={<Radio size='small' />}
         />
       ))}
     </RadioGroup>

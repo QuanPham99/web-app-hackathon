@@ -21,9 +21,11 @@ function ProjectFilter({ title, fetchdata_url, isMultiChoice = false }) {
   return (
     <Accordion>
       <AccordionSummary
-        expandIcon={<MdOutlineExpandMore style={{ color: 'black' }} />}
+        expandIcon={
+          <MdOutlineExpandMore style={{ color: 'black', fontSize: '24px' }} />
+        }
       >
-        <Typography>{title}</Typography>
+        <Typography variant='h6'>{title}</Typography>
       </AccordionSummary>
 
       <AccordionDetails>

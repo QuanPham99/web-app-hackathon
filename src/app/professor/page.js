@@ -1,7 +1,8 @@
 import ProjectCard from '@/components/ProjectCard';
 import ProjectFilter from '@/components/filter/ProjectFilter';
-import { Container, Stack } from '@mui/material';
+import { Box, Container, Stack } from '@mui/material';
 import { React } from 'react';
+import FilterContainer from '@/components/filter/FilterContainer';
 
 const projectDetail = {
   company_name: 'Google',
@@ -27,17 +28,19 @@ async function Page() {
   };
 
   return (
-    <div>
-      <Container>
+    <div style={{ width: '100%' }}>
+      <Box sx={{ marginLeft: '300px', px: 4 }}>
         <Stack spacing={2}>
-          {projects.map((project) => (
-            <ProjectCard projectDetail={project} />
+          {projects.map((project, index) => (
+            <ProjectCard key={index} projectDetail={project} />
           ))}
         </Stack>
-      </Container>
+      </Box>
 
-      <ProjectFilter title='Topic' isMultiChoice={true} />
-      <ProjectFilter title='Company'  />
+      <FilterContainer>
+        <ProjectFilter title='Topic' isMultiChoice={true} />
+        <ProjectFilter title='Company' />
+      </FilterContainer>
     </div>
   );
 }
