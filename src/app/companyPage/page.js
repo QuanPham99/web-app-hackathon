@@ -1,4 +1,3 @@
-"use client";
 import ProjectCard from "../../components/ProjectCard";
 import {
   Container,
@@ -9,10 +8,13 @@ import {
   Toolbar,
   ThemeProvider,
   Typography,
+  Box,
 } from "@mui/material";
 import React from "react";
 import { createTheme } from "@mui/material";
-
+import NavBar from "@/components/navigation/NavBar";
+import FilterContainer from "@/components/filter/FilterContainer";
+import ProjectStatusFilter from "@/components/filter/ProjectStatusFilter";
 const projectDetail = {
   company_name: "Google",
   company_logo_url: "/assets/google_logo.png",
@@ -26,85 +28,34 @@ const projectDetail = {
 };
 
 const projects = [projectDetail, projectDetail, projectDetail];
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#FFFFFF",
-    },
-    secondary: {
-      main: "#000000",
-    },
-  },
-});
+// const theme = createTheme({
+//   palette: {
+//     primary: {
+//       main: "#FFFFFF",
+//     },
+//     secondary: {
+//       main: "#000000",
+//     },
+//   },
+// });
 function CompanyPage() {
   return (
-    <div>
-      <ThemeProvider theme={theme}>
-        <AppBar>
-          <Grid container spacing={2}>
-            <Grid item xs={5}>
-              <Grid container spacing={0}>
-                <Grid item>
-                  <Typography
-                    variant='body1'
-                    component='h1'
-                    style={{ paddingLeft: "30px", paddingTop: "18px" }}
-                  >
-                    Logo
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Typography
-                    variant='body1'
-                    component='h1'
-                    style={{ padding: "18px" }}
-                  >
-                    Web Name
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Typography
-                    variant='body1'
-                    component='h1'
-                    style={{ paddingLeft: "30px", paddingTop: "18px" }}
-                  >
-                    Current Projects
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item>
-              <Container style={{ paddingTop: "12px" }}>
-                <Button variant='contained' style={{ borderRadius: "24px" }}>
-                  Add Project
-                </Button>
-              </Container>
-            </Grid>
-          </Grid>
-        </AppBar>
-      </ThemeProvider>
-      <div>
-        <center>App Bar will be here</center>
-      </div>
-      {/* <Container> */}
-      <Grid container spacing={2} paddingTop='18px'>
-        <Grid item xs={12} sm={16}>
-          <Container>
-            {/* <center>
-              <Button variant='contained' style={{ borderRadius: "24px" }}>
-                New Project
-              </Button>
-            </center> */}
-            <Stack spacing={2} paddingTop='18px'>
-              {projects.map((project) => (
-                <ProjectCard key={project.id} projectDetail={project} />
-              ))}
-            </Stack>
-          </Container>
-        </Grid>
-      </Grid>
+    <div style={{ width: "100%" }}>
+      <Box sx={{ marginLeft: "300px" }}>
+        <Stack spacing={2}>
+          {projects.map((project, index) => (
+            <ProjectCard key={index} projectDetail={project} />
+          ))}
+        </Stack>
+      </Box>
 
-      {/* </Container> */}
+      <FilterContainer>
+        <ProjectStatusFilter
+          title='Status'
+          isMultiChoice={true}
+          projectsList={projects}
+        />
+      </FilterContainer>
     </div>
   );
 }
