@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { HiOutlineBookmark } from 'react-icons/hi';
 import React from 'react';
+import { formatDate } from '../utils';
 
 const descriptionMaxLine = 3;
 
@@ -37,8 +38,8 @@ function ProjectCard({ user, projectDetail }) {
         <Typography variant='h4'>{projectDetail.title}</Typography>
         <Typography noWrap color='text.secondary' variant='body2'>
           {user && user.role === 'prof' && projectDetail.status === 'accepted'
-            ? `Date accepted: ${projectDetail.date_accepted}`
-            : `Date posted: ${projectDetail.date_posted}`}{' '}
+            ? `Date accepted: ${formatDate(projectDetail.date_accepted)}`
+            : `Date posted: ${formatDate(projectDetail.date_posted)}`}{' '}
           | Topics: {projectDetail.topics.join(', ')}
         </Typography>
         <Typography sx={{ fontWeight: 'bold', mt: 2, fontSize: 16 }}>
