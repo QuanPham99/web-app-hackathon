@@ -17,7 +17,7 @@ function ProfessorPageLayout({ children }) {
       <NavBar navOptions={professorNavOptions} />
 
       <div
-        style={{ paddingRight: '24px', paddingLeft: '24px', marginTop: '16px' }}
+        style={{ paddingRight: '64px', paddingLeft: '64px', marginTop: '16px' }}
       >
         {children}
       </div>

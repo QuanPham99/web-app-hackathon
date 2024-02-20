@@ -11,10 +11,10 @@ function FilterContainer({ children, paperProps }) {
       elevation={0}
       PaperProps={{
         sx: {
-          width: 300,
+          width: 280,
           position: 'absolute',
           marginTop: '84px',
-          marginLeft: '24px',
+          marginLeft: '64px',
           ...paperProps,
         },
       }}
