@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { getUser } from '@/database/user';
+import { validateHashedPassword } from '@/utils';
 
 const handler = NextAuth({
   providers: [
@@ -11,7 +12,14 @@ const handler = NextAuth({
 
         const user = await getUser(email);
 
-        if (user && user.password === password) {
+        const isCorrectPassword = await validateHashedPassword(
+          password,
+          user.password
+        );
+
+        console.log(isCorrectPassword);
+
+        if (isCorrectPassword) {
           return user;
         } else {
           return null;
