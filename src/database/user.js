@@ -13,3 +13,17 @@ export const getUser = async (email) => {
     await client.close();
   }
 };
+
+export const registerUser = async (userInfo) => {
+  try {
+    await client.connect();
+
+    await client.db('User').collection('People').insertOne(userInfo);
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, error };
+  } finally {
+    await client.close();
+  }
+};

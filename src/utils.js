@@ -12,10 +12,11 @@ export const hashPassword = async (password) => {
   return hashedPassword;
 };
 
-export const validateHasedPassword = async (password, hashedPassword) => {
-  bcrypt.compare(password, hashedPassword, function (err, isMatch) {
-    if (err) throw err;
-
-    return isMatch;
-  });
+export const validateHashedPassword = async (password, hashedPassword) => {
+  try {
+    const res = await bcrypt.compare(password, hashedPassword);
+    return res;
+  } catch (error) {
+    throw error;
+  }
 };

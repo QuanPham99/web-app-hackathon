@@ -15,6 +15,7 @@ import { signIn } from 'next-auth/react';
 import { hashPassword } from '@/utils';
 
 function SignInPage() {
+  const [submitting, setSubmitting] = useState(false);
   const [credentials, setCredentials] = useState({
     email: '',
     password: '',
@@ -34,18 +35,21 @@ function SignInPage() {
     }));
   };
 
-  const handeSubmitForm = async (event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
+    setSubmitting(true);
+    try {
+      const res = await signIn('credentials', {
+        ...credentials,
+        callbackUrl: '/',
+        redirect: false,
+      });
 
-    const res = await signIn('credentials', {
-      email: credentials.email,
-      password: credentials.password,
-      callbackUrl: '/',
-      redirect: false,
-    });
-
-    if (!res.ok) {
-      alert('User does not exist or password is incorrect.');
+      if (!res.ok) {
+        alert('User does not exist or password is incorrect.');
+      }
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -57,12 +61,12 @@ function SignInPage() {
             <LockOutlined />
           </Avatar>
         </center>
-        <Typography component='h1' variant='h5'>
-          Sign in
+        <Typography component='h1' variant='h5' disabled={submitting}>
+          {submitting ? 'Signing in...' : 'Sign in'}
         </Typography>
         <form
           className={styles.info_form}
-          onSubmit={handeSubmitForm}
+          onSubmit={handleFormSubmit}
           method='POST'
         >
           <Grid container spacing={2}>
