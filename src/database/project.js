@@ -1,7 +1,6 @@
 /**
  * Helper functions for Project Entities
  */
-import { MongoClient } from 'mongodb';
 import client from './client';
 
 export const getAllProjects = async ({ status = 'posted' }) => {
