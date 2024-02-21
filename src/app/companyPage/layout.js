@@ -9,7 +9,21 @@ const companyNavOptions = [
   { name: "Professors", url: "/companyPage/associatedProfessors" },
 ];
 
-function CompanyPageLayout({ children }) {
+const company = {
+  username: "Shadow_Org",
+  password: "bnm",
+  id: "com_1",
+  org: "Shadow Corp",
+  email: "shadow_org@gmail.com",
+  role: "com",
+  image_url: "",
+  owned_projects: ["Web Dev"],
+  company_overview: "This is a shadow company",
+};
+
+export default function CompanyPageLayout(props) {
+  props.params.company = company;
+  //   console.log(props);
   const [showModal, setShowModal] = useState(false);
   const pageButton = () => {
     return (
@@ -48,11 +62,9 @@ function CompanyPageLayout({ children }) {
       <div
         style={{ paddingRight: "24px", paddingLeft: "24px", marginTop: "16px" }}
       >
-        {children}
+        {props.children}
         {showModal && popUp}
       </div>
     </div>
   );
 }
-
-export default CompanyPageLayout;

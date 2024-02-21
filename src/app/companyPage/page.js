@@ -11,10 +11,9 @@ import {
   Box,
 } from "@mui/material";
 import React from "react";
-import { createTheme } from "@mui/material";
-import NavBar from "@/components/navigation/NavBar";
 import FilterContainer from "@/components/filter/FilterContainer";
 import ProjectStatusFilter from "@/components/filter/ProjectStatusFilter";
+import { getProjectsByCompany } from "../../database/company";
 const projectDetail = {
   company_name: "Google",
   company_logo_url: "/assets/google_logo.png",
@@ -26,8 +25,19 @@ const projectDetail = {
   status: "posted",
   date_accepted: null,
 };
+const company = {
+  username: "Shadow_Org",
+  password: "bnm",
+  id: "com_1",
+  org: "Shadow Corp",
+  email: "shadow_org@gmail.com",
+  role: "com",
+  image_url: "",
+  owned_projects: ["Web Dev"],
+  company_overview: "This is a shadow company",
+};
 
-const projects = [projectDetail, projectDetail, projectDetail];
+const mock_projects = [projectDetail, projectDetail, projectDetail];
 // const theme = createTheme({
 //   palette: {
 //     primary: {
@@ -38,7 +48,14 @@ const projects = [projectDetail, projectDetail, projectDetail];
 //     },
 //   },
 // });
-function CompanyPage() {
+const CompanyPage = async (props) => {
+  const { success, data } = await getProjectsByCompany({
+    company_id: company.id,
+  });
+  var projects = mock_projects;
+  if (success) {
+    projects = data;
+  }
   return (
     <div style={{ width: "100%" }}>
       <Box sx={{ marginLeft: "300px" }}>
@@ -58,6 +75,6 @@ function CompanyPage() {
       </FilterContainer>
     </div>
   );
-}
+};
 
 export default CompanyPage;

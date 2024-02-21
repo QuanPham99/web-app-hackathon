@@ -1,14 +1,11 @@
-/**
- * Helper functions for Project Entities
- */
 import { MongoClient } from "mongodb";
 import client from "./client";
 
-export const getAllProjects = async ({ status = "posted" }) => {
+export const getProjectsByCompany = async ({ company_id }) => {
   try {
     await client.connect();
 
-    const query = { status: status };
+    const query = { company_id: company_id };
 
     // Other options for sorting and filter
     const options = { sort: { data_posted: -1 } };
@@ -26,6 +23,7 @@ export const getAllProjects = async ({ status = "posted" }) => {
     await client.close();
   }
 };
+
 export const addProject = async ({ company_id, description, title }) => {
   try {
     await client.connect();
