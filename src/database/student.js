@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb';
 import client from './client';
 
-export const getStudent = async ({ username = 'posted '}) => {
+export const getStudent = async ({ username = 'phamquan'}) => {
     try {
         await client.connect();
 

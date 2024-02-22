@@ -1,7 +1,8 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Avatar, Typography, Container, Grid, Paper } from '@material-ui/core';
+import { getStudent } from '@/database/student';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -18,8 +19,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfilePage = () => {
-  const classes = useStyles();
+function ProfilePage() {
+
+  const [data, setData] = useState(null)
+
+  const fetchStudentData = async () => {
+    const res = await fetch('/api/students', {method: 'GET'})
+
+    if (!res.ok) {
+      throw Error('Unknown Error')
+    } else {
+      setData(res.data)
+    }
+  }
+  useEffect(()=>{
+
+    fetchStudentData();
+  }, [])
+  // const classes = useStyles();
 
   return (
     <Container className={classes.root} maxWidth="md">
