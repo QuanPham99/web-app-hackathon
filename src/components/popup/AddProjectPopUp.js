@@ -23,6 +23,7 @@ function AddProjectPopUp({ open, onClose, company }) {
   const addProjectToDatabase = async () => {
     try {
       const body = {
+        // TO DO: replace with real value
         company_id: 'com_1',
         description: projectInfo.description,
         title: projectInfo.title,

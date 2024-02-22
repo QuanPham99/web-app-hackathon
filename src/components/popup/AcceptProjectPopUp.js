@@ -10,22 +10,24 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
-function formatDate(date) {
-  // Get the month, day, and year from the Date object
-  const month = date.getMonth() + 1; // Months are zero-based, so we add 1
-  const day = date.getDate();
-  const year = date.getFullYear();
+import { formatDate } from '@/utils';
+// function formatDate(date) {
+//   // Get the month, day, and year from the Date object
+//   const month = date.getMonth() + 1; // Months are zero-based, so we add 1
+//   const day = date.getDate();
+//   const year = date.getFullYear();
 
-  // Ensure that single-digit days and months are prefixed with a '0'
-  const formattedMonth = month < 10 ? `0${month}` : month;
-  const formattedDay = day < 10 ? `0${day}` : day;
+//   // Ensure that single-digit days and months are prefixed with a '0'
+//   const formattedMonth = month < 10 ? `0${month}` : month;
+//   const formattedDay = day < 10 ? `0${day}` : day;
 
-  // Return the formatted date string
-  return `${formattedMonth}/${formattedDay}/${year}`;
-}
+//   // Return the formatted date string
+//   return `${formattedMonth}/${formattedDay}/${year}`;
+// }
+
 function AcceptProjectPopUp({ open, onClose, projectInfo }) {
   const [submitting, setSubmitting] = useState(false);
-  console.log(projectInfo);
+  //   console.log(projectInfo);
   const handleBackdropClick = (event) => {
     if (event.target === event.currentTarget) {
       // Only close the modal if backdrop is clicked directly, not its children
@@ -33,6 +35,32 @@ function AcceptProjectPopUp({ open, onClose, projectInfo }) {
     }
   };
 
+  const acceptProject = async () => {
+    try {
+      const body = {
+        // TO DO: replace with real professor_id
+        professor_id: 'prof_1',
+        project_id: projectInfo.id,
+      };
+      const res = await fetch('/api/professor', {
+        method: 'PUT',
+        body: JSON.stringify({
+          ...body,
+        }),
+      });
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const acceptAction = async () => {
+    setSubmitting(true);
+    await acceptProject();
+    onClose();
+  };
   return (
     <Modal
       open={open}
@@ -75,6 +103,7 @@ function AcceptProjectPopUp({ open, onClose, projectInfo }) {
             <Box paddingTop='16px' paddingRight='16px'>
               <Button
                 disabled={submitting}
+                onClick={acceptAction}
                 type='submit'
                 variant='contained'
                 style={{ borderRadius: '24px' }}
