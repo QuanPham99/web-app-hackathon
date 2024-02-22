@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import React, { useState, useRef } from 'react';
 import { signOut } from 'next-auth/react';
+import StringAvatar from '@/components/navigation/StringAvatar';
 
 function UserAvatar({ user, ...props }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -37,9 +38,11 @@ function UserAvatar({ user, ...props }) {
   return (
     <>
       <IconButton onClick={handleAvatarclick} aria-describedby={id}>
-        <Avatar alt='User Avatar' sx={{ bgcolor: 'black' }}>
-          UA
-        </Avatar>
+        {user.image_url && user.image_url !== '' ? (
+          <Avatar alt='User Avatar' src={user.image_url} />
+        ) : (
+          <StringAvatar name={`${user.firstName} ${user.lastName}`} />
+        )}
       </IconButton>
 
       <Popover
