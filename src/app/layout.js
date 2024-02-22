@@ -4,6 +4,8 @@ import ThemeProviderClient from '@/components/providers/ThemeProviderClient';
 import { CssBaseline } from '@mui/material';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import NavBar from '@/components/navigation/NavBar';
+import SignInBtn from '@/components/navigation/SignInBtn';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,6 +21,7 @@ export default function RootLayout({ children }) {
         <ThemeProviderClient>
           <CssBaseline />
           <main>
+            <NavBar />
             {children}
             <ToastContainer
               position='top-right'
