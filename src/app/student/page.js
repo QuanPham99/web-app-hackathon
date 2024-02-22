@@ -2,6 +2,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Avatar, Typography, Container, Grid, Paper } from '@material-ui/core';
+import { getStudent } from '@/database/student';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -18,17 +19,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfilePage = () => {
+const ProfilePage = async () => {
+  const studentData = await getStudent('phamquan');
   const classes = useStyles();
-
+  
   return (
     <Container className={classes.root} maxWidth="md">
       <Paper className={classes.paper}>
         <Grid container spacing={3} alignItems="center" justifyContent="center">
           <Grid item xs={12} md={4} align="center">
             <Avatar alt="Profile Picture" src="profile.jpg" className={classes.avatar} />
-            <Typography variant="h6">Quan Pham</Typography>
-            <Typography variant="subtitle1" color="textSecondary">Software Engineer</Typography>
+            <Typography variant="h6">{studentData.first_name} {studentData.last_name}</Typography>
+            <Typography variant="subtitle1" >{studentData.role} </Typography>
           </Grid>
           <Grid item xs={12} md={8}>
             <Typography variant="body1">
@@ -38,7 +40,7 @@ const ProfilePage = () => {
               Email
             </Typography> 
             <Typography variant="body1">
-              Current Projects
+              Current Projects: {studentData.current_proj}
             </Typography>  
           </Grid>
         </Grid>
