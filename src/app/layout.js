@@ -21,7 +21,6 @@ export default function RootLayout({ children }) {
         <ThemeProviderClient>
           <CssBaseline />
           <main>
-            <NavBar />
             {children}
             <ToastContainer
               position='top-right'
