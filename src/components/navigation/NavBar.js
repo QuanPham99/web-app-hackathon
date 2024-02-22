@@ -11,11 +11,10 @@ import {
 import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 import UserAvatar from './UserAvatar';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
-function NavBar({ navOptions = [], optionComponents = [] }) {
-  // const {data: session } = getServerSession()
-  const mock_user = { lastName: 'Le', firstName: 'Minh' };
-  // const mock_user = undefined;
+async function NavBar({ navOptions = [], optionComponents = [] }) {
+  const session = await getServerSession(authOptions);
 
   return (
     <AppBar position='static' color='transparent' elevation={0}>
@@ -48,9 +47,11 @@ function NavBar({ navOptions = [], optionComponents = [] }) {
               </Link>
             ))}
           </Box>
+
           {optionComponents}
-          {mock_user ? (
-            <UserAvatar user={mock_user} />
+
+          {session?.user ? (
+            <UserAvatar user={session.user} />
           ) : (
             <Button
               variant='contained'
