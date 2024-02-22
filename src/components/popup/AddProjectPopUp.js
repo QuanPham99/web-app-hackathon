@@ -1,7 +1,7 @@
-import React from "react";
-import { Modal, Box, TextField, Button, IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
+import React from 'react';
+import { Modal, Box, TextField, Button, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { useState } from 'react';
 function AddProjectPopUp({ open, onClose, company }) {
   const [submitting, setSubmitting] = useState(false);
   const [projectInfo, setProjectInfo] = useState({
@@ -23,16 +23,16 @@ function AddProjectPopUp({ open, onClose, company }) {
   const addProjectToDatabase = async () => {
     try {
       const body = {
-        company_id: "com_1",
+        company_id: 'com_1',
         description: projectInfo.description,
         title: projectInfo.title,
         professor_id: undefined,
-        status: "posted",
+        status: 'posted',
         date_posted: new Date(),
-        topic: ["Demo"],
+        topic: ['Demo'],
       };
-      const res = await fetch("/api/projects", {
-        method: "POST",
+      const res = await fetch('/api/projects', {
+        method: 'POST',
         body: JSON.stringify({
           ...body,
         }),
@@ -63,26 +63,26 @@ function AddProjectPopUp({ open, onClose, company }) {
       <div onClick={handleBackdropClick}>
         <Box
           sx={{
-            position: "absolute",
-            top: "30%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            bgcolor: "background.paper",
+            position: 'absolute',
+            top: '30%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
             boxShadow: 24,
             //   p: 4,
             paddingLeft: 4,
             paddingRight: 4,
             paddingBottom: 4,
             width: 800,
-            maxHeight: "100%",
-            overflowY: "auto",
-            borderRadius: "16px",
+            maxHeight: '100%',
+            overflowY: 'auto',
+            borderRadius: '16px',
           }}
         >
           {/* Your pop-up content */}
           <IconButton
             aria-label='Close'
-            sx={{ position: "absolute", top: 4, right: 8 }}
+            sx={{ position: 'absolute', top: 4, right: 8 }}
             onClick={onClose}
           >
             <CloseIcon />
@@ -102,7 +102,7 @@ function AddProjectPopUp({ open, onClose, company }) {
               label="What's the project called?"
               variant='outlined'
               name='title'
-              style={{ paddingBottom: "16px" }}
+              style={{ paddingBottom: '16px' }}
             />
 
             <p id='modal-project-description'>Project Description</p>
@@ -122,9 +122,9 @@ function AddProjectPopUp({ open, onClose, company }) {
                   disabled={submitting}
                   type='submit'
                   variant='contained'
-                  style={{ borderRadius: "24px" }}
+                  style={{ borderRadius: '24px' }}
                 >
-                  {submitting ? "Creating..." : "Create Project "}
+                  {submitting ? 'Creating...' : 'Create Project '}
                 </Button>
               </Box>
             </center>
