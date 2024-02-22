@@ -7,12 +7,17 @@ import {
   TextField,
   Grid,
   Container,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from '@mui/material';
 import { LockOutlined } from '@mui/icons-material';
 import styles from './signup.module.css';
 import Link from 'next/link';
 import { hashPassword } from '@/utils';
 import { signIn } from 'next-auth/react';
+import { toast } from 'react-toastify';
 
 function SignUpPage() {
   const [submitting, setSubmitting] = useState(false);
@@ -22,6 +27,7 @@ function SignUpPage() {
     lastName: undefined,
     email: undefined,
     password: undefined,
+    role: undefined,
   });
 
   const handleChange = (event) => {
@@ -34,7 +40,7 @@ function SignUpPage() {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     setSubmitting(true);
-
+    console.log(userInfo);
     // Call api to register the user into our database
     try {
       const res = await fetch('/api/users/signup', {
@@ -46,7 +52,7 @@ function SignUpPage() {
       });
 
       if (!res.ok) {
-        alert('User already exist');
+        toast.error('User already exist');
       } else {
         // User signing up successfully
         await signIn('credentials', {
@@ -114,7 +120,7 @@ function SignUpPage() {
                 autoComplete='email'
               />
             </Grid>
-            <Grid item xs={12} sx={{ marginBottom: '5%' }}>
+            <Grid item xs={12}>
               <TextField
                 variant='outlined'
                 required
@@ -126,12 +132,24 @@ function SignUpPage() {
                 autoComplete='current-password'
               />
             </Grid>
-            {/* <Grid item xs={12} style={{ paddingBottom: '5%' }}>
-              <FormControlLabel
-                control={<Checkbox value='allowExtraEmails' color='primary' />}
-                label='I want to receive inspiration, marketing promotions and updates via email.'
-              />
-            </Grid> */}
+            <Grid item xs={12} sx={{ marginBottom: '5%' }}>
+              <FormControl sx={{ width: '100%' }}>
+                <InputLabel id='role-select-label'>Role</InputLabel>
+                <Select
+                  labelId='role-select-label'
+                  id='role-select'
+                  value={userInfo.role}
+                  label='Role'
+                  name='role'
+                  fullWidth
+                  onChange={handleChange}
+                >
+                  <MenuItem value='com'>Company</MenuItem>
+                  <MenuItem value='prof'>Professor</MenuItem>
+                  <MenuItem value='stud'>Student</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
           </Grid>
           <Button
             type='submit'
@@ -140,7 +158,6 @@ function SignUpPage() {
             variant='contained'
             color='primary'
             sx={{ border: '2px black solid', borderRadius: '24px' }}
-            // style={{color:'white', backgroundColor:'black'}}
           >
             {submitting ? 'Signing up...' : 'Sign Up'}
           </Button>
