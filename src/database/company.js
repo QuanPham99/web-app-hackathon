@@ -24,23 +24,15 @@ export const getProjectsByCompany = async ({ company_id }) => {
   }
 };
 
-export const addProject = async ({ company_id, description, title }) => {
+export const addProject = async (projectinfo) => {
   try {
     await client.connect();
 
-    const query = {
-      company_id: company_id,
-      description: description,
-      title: title,
-    };
-
     // Other options for sorting and filter
     // const options = { sort: { data_posted: -1 } };
+    await client.db("User").collection("Projects").insertOne(projectinfo);
 
-    const projects = client.db("User").collection("Projects").insertOne(query);
-
-    const data = await projects.toArray();
-    return { success: true, data: data };
+    return { success: true };
   } catch (error) {
     return { success: false, error };
   } finally {

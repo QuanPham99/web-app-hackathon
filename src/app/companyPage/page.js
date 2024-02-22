@@ -38,16 +38,6 @@ const company = {
 };
 
 const mock_projects = [projectDetail, projectDetail, projectDetail];
-// const theme = createTheme({
-//   palette: {
-//     primary: {
-//       main: "#FFFFFF",
-//     },
-//     secondary: {
-//       main: "#000000",
-//     },
-//   },
-// });
 const CompanyPage = async (props) => {
   const { success, data } = await getProjectsByCompany({
     company_id: company.id,
