@@ -41,7 +41,7 @@ function UserAvatar({ user, ...props }) {
         {user.image_url && user.image_url !== '' ? (
           <Avatar alt='User Avatar' src={user.image_url} />
         ) : (
-          <StringAvatar name={`${user.firstName} ${user.lastName}`} />
+          <StringAvatar name={`${user.first_name} ${user.last_name}`} />
         )}
       </IconButton>
 
@@ -56,7 +56,7 @@ function UserAvatar({ user, ...props }) {
         <Box sx={{ py: 1.5, px: 2 }}>
           <Typography variant='overline'>Account</Typography>
           <Typography variant='body2'>
-            {`${user.firstName} ${user.lastName}`}
+            {`${user.first_name} ${user.last_name}`}
           </Typography>
         </Box>
         <Divider />
