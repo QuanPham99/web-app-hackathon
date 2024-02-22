@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   AppBar,
-  Avatar,
   Box,
   Button,
   Container,
@@ -12,6 +11,7 @@ import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 import UserAvatar from './UserAvatar';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import NavOption from '@/components/navigation/NavOption';
 
 async function NavBar({ navOptions = [], optionComponents = [] }) {
   const session = await getServerSession(authOptions);
@@ -35,16 +35,7 @@ async function NavBar({ navOptions = [], optionComponents = [] }) {
             }}
           >
             {navOptions.map((option, index) => (
-              <Link
-                key={index}
-                href={option.url}
-                style={{
-                  textDecoration: 'none',
-                  color: 'black',
-                }}
-              >
-                <Typography variant='subtitle'>{option.name}</Typography>
-              </Link>
+              <NavOption key={index} option={option} />
             ))}
           </Box>
 
