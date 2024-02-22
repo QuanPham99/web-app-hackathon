@@ -40,7 +40,8 @@ function ProjectCard({ user, projectDetail }) {
           {user && user.role === 'prof' && projectDetail.status === 'accepted'
             ? `Date accepted: ${formatDate(projectDetail.date_accepted)}`
             : `Date posted: ${formatDate(projectDetail.date_posted)}`}{' '}
-          | Topics: {projectDetail.topics.join(', ')}
+          {projectDetail.topics &&
+            `| Topics: ${projectDetail.topics?.join(', ')}`}
         </Typography>
         <Typography sx={{ fontWeight: 'bold', mt: 2, fontSize: 16 }}>
           Description:
