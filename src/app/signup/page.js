@@ -1,46 +1,84 @@
-"use client";
-import React from "react";
+'use client';
+import React, { useState } from 'react';
 import {
   Button,
   Typography,
   Avatar,
   TextField,
   Grid,
-  FormControlLabel,
-  Checkbox,
-  Link,
   Container,
-  ThemeProvider,
-} from "@mui/material";
-import { LockOutlined } from "@mui/icons-material";
-import { pink, red, white, black } from "@mui/material/colors";
-import { createTheme } from "@mui/material";
-import styles from "./signup.module.css";
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#FFFFFF",
-    },
-    secondary: {
-      main: red[500],
-    },
-  },
-});
+} from '@mui/material';
+import { LockOutlined } from '@mui/icons-material';
+import styles from './signup.module.css';
+import Link from 'next/link';
+import { hashPassword } from '@/utils';
+import { signIn } from 'next-auth/react';
 
 function SignUpPage() {
+  const [submitting, setSubmitting] = useState(false);
+
+  const [userInfo, setUserInfo] = useState({
+    firstName: undefined,
+    lastName: undefined,
+    email: undefined,
+    password: undefined,
+  });
+
+  const handleChange = (event) => {
+    setUserInfo((prev) => ({
+      ...prev,
+      [event.target.name]: event.target.value,
+    }));
+  };
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    setSubmitting(true);
+
+    // Call api to register the user into our database
+    try {
+      const res = await fetch('/api/users/signup', {
+        method: 'POST',
+        body: JSON.stringify({
+          ...userInfo,
+          password: await hashPassword(userInfo.password),
+        }),
+      });
+
+      if (!res.ok) {
+        alert('User already exist');
+      } else {
+        // User signing up successfully
+        await signIn('credentials', {
+          email: userInfo.email,
+          password: userInfo.password,
+          callbackUrl: '/',
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div className={styles.signup}>
       <Container>
         <center>
-          <Avatar style={{ backgroundColor: "red" }}>
+          <Avatar style={{ backgroundColor: 'red' }}>
             <LockOutlined />
           </Avatar>
         </center>
         <Typography component='h1' variant='h5'>
           Sign up
         </Typography>
-        <form className={styles.info_form}>
+        <form
+          className={styles.info_form}
+          onChange={handleChange}
+          onSubmit={handleFormSubmit}
+          method='post'
+        >
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -76,7 +114,7 @@ function SignUpPage() {
                 autoComplete='email'
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ marginBottom: '5%' }}>
               <TextField
                 variant='outlined'
                 required
@@ -88,29 +126,36 @@ function SignUpPage() {
                 autoComplete='current-password'
               />
             </Grid>
-            <Grid item xs={12} style={{ paddingBottom: "5%" }}>
+            {/* <Grid item xs={12} style={{ paddingBottom: '5%' }}>
               <FormControlLabel
                 control={<Checkbox value='allowExtraEmails' color='primary' />}
                 label='I want to receive inspiration, marketing promotions and updates via email.'
               />
-            </Grid>
+            </Grid> */}
           </Grid>
-          <ThemeProvider theme={theme}>
-            <Button
-              type='submit'
-              fullWidth
-              variant='contained'
-              color='primary'
-              sx={{ border: "2px black solid", borderRadius: "24px" }}
-              // style={{color:'white', backgroundColor:'black'}}
-            >
-              Sign Up
-            </Button>
-          </ThemeProvider>
+          <Button
+            type='submit'
+            disabled={submitting}
+            fullWidth
+            variant='contained'
+            color='primary'
+            sx={{ border: '2px black solid', borderRadius: '24px' }}
+            // style={{color:'white', backgroundColor:'black'}}
+          >
+            {submitting ? 'Signing up...' : 'Sign Up'}
+          </Button>
 
-          <Link href='/' variant='body2'>
-            Already have an account? Sign in
-          </Link>
+          <Typography
+            variant='body2'
+            sx={{
+              marginTop: '5%',
+            }}
+          >
+            Already have an account?{' '}
+            <Link href='/signin' style={{ display: 'inline-flex' }}>
+              Sign in
+            </Link>
+          </Typography>
         </form>
       </Container>
     </div>
