@@ -40,7 +40,7 @@ function SignUpPage() {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     setSubmitting(true);
-    console.log(userInfo);
+
     // Call api to register the user into our database
     try {
       const res = await fetch('/api/users/signup', {
