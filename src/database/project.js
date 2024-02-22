@@ -1,9 +1,9 @@
 /**
  * Helper functions for Project Entities
  */
-import client from './client';
+import client from "./client";
 
-export const getAllProjects = async ({ status = 'posted' }) => {
+export const getAllProjects = async ({ status = "posted" }) => {
   try {
     await client.connect();
 
@@ -13,8 +13,8 @@ export const getAllProjects = async ({ status = 'posted' }) => {
     const options = { sort: { data_posted: -1 } };
 
     const projects = client
-      .db('User')
-      .collection('Projects')
+      .db("User")
+      .collection("Projects")
       .find(query, options);
 
     const data = await projects.toArray();

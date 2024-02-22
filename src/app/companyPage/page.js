@@ -11,10 +11,9 @@ import {
   Box,
 } from "@mui/material";
 import React from "react";
-import { createTheme } from "@mui/material";
-import NavBar from "@/components/navigation/NavBar";
 import FilterContainer from "@/components/filter/FilterContainer";
 import ProjectStatusFilter from "@/components/filter/ProjectStatusFilter";
+import { getProjectsByCompany } from "../../database/company";
 const projectDetail = {
   company_name: "Google",
   company_logo_url: "/assets/google_logo.png",
@@ -28,16 +27,16 @@ const projectDetail = {
 };
 
 const projects = [projectDetail, projectDetail, projectDetail];
-// const theme = createTheme({
-//   palette: {
-//     primary: {
-//       main: "#FFFFFF",
-//     },
-//     secondary: {
-//       main: "#000000",
-//     },
-//   },
-// });
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#FFFFFF",
+    },
+    secondary: {
+      main: "#000000",
+    },
+  },
+});
 function CompanyPage() {
   return (
     <div style={{ width: "100%" }}>
@@ -58,6 +57,6 @@ function CompanyPage() {
       </FilterContainer>
     </div>
   );
-}
+};
 
 export default CompanyPage;

@@ -1,7 +1,8 @@
 import React from "react";
 import { Modal, Box, TextField, Button, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-function AddProjectPopUp({ open, onClose }) {
+// import { addProject } from "../../database/company";
+function AddProjectPopUp({ open, onClose, company }) {
   const handleBackdropClick = (event) => {
     if (event.target === event.currentTarget) {
       // Only close the modal if backdrop is clicked directly, not its children
