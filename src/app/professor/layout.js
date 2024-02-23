@@ -8,7 +8,6 @@ export const metadata = {
 const professorNavOptions = [
   { name: 'Search Projects', url: '/professor' },
   { name: 'Accepted Projects', url: '/professor/accepted-projects' },
-  { name: 'My Students', url: '/professor/all-students' },
 ];
 
 function ProfessorPageLayout({ children }) {

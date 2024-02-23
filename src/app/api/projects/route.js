@@ -1,10 +1,10 @@
-import { NextResponse } from "next/server";
-import { getAllProjects } from "../../../database/project";
-import { addProject } from "../../../database/company";
+import { NextResponse } from 'next/server';
+import { deleteProject, getAllProjects } from '../../../database/project';
+import { addProject } from '../../../database/company';
 export async function GET(request) {
   // get the query parameters from the url
   const { searchParams } = new URL(request.url);
-  const status = searchParams.get("status");
+  const status = searchParams.get('status');
 
   const res = await getAllProjects({ status });
 
@@ -19,6 +19,18 @@ export async function POST(request) {
   // console.log(request);
   const projectInfo = await request.json();
   const result = await addProject(projectInfo);
+
+  if (result.success) {
+    return NextResponse.json({}, { status: 200 });
+  } else {
+    return NextResponse.json({ error: result.error }, { status: 400 });
+  }
+}
+
+export async function DELETE(request) {
+  // get the query parameters from the url
+  const body = await request.json();
+  const result = await deleteProject(body.project_id);
 
   if (result.success) {
     return NextResponse.json({}, { status: 200 });

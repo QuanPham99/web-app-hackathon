@@ -4,6 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+
 function AddProjectPopUp({ open, onClose, company }) {
   const router = useRouter();
   const { data: session } = useSession();
@@ -58,7 +59,6 @@ function AddProjectPopUp({ open, onClose, company }) {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     setSubmitting(true);
-    console.log(projectInfo);
     await addProjectToDatabase();
     onClose();
   };

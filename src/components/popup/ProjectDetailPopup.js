@@ -12,12 +12,15 @@ import { useState } from 'react';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { formatDate } from '@/utils';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+import AcceptProjectBtn from '@/components/buttons/AcceptProjectBtn';
 
-function AcceptProjectPopUp({ open, onClose, projectInfo }) {
+function ProjectDetailPopup({ open, onClose, projectInfo }) {
   const { data: session } = useSession();
-  //   console.log(session);
+  const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
-  //   console.log(projectInfo);
+
   const handleBackdropClick = (event) => {
     if (event.target === event.currentTarget) {
       // Only close the modal if backdrop is clicked directly, not its children
@@ -25,20 +28,21 @@ function AcceptProjectPopUp({ open, onClose, projectInfo }) {
     }
   };
 
-  const acceptProject = async () => {
+  const deleteProject = async () => {
     try {
       const body = {
         // TO DO: replace with real professor_id
-        professor_id: session.user._id,
-        project_id: projectInfo.id,
+        project_id: projectInfo._id,
       };
-      const res = await fetch('/api/professor', {
-        method: 'PUT',
+      const res = await fetch('/api/projects', {
+        method: 'DELETE',
         body: JSON.stringify({
           ...body,
         }),
       });
-      console.log(res);
+      if (res.ok) {
+        router.refresh();
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -46,9 +50,9 @@ function AcceptProjectPopUp({ open, onClose, projectInfo }) {
     }
   };
 
-  const acceptAction = async () => {
+  const deleteAction = async () => {
     setSubmitting(true);
-    await acceptProject();
+    await deleteProject();
     onClose();
   };
   return (
@@ -85,33 +89,49 @@ function AcceptProjectPopUp({ open, onClose, projectInfo }) {
           >
             <KeyboardBackspaceIcon />
           </IconButton>
-          <Container style={{ paddingTop: '36px', paddingLeft: 0 }}>
+          {session.user && session.user.role === 'prof' && (
+            <Container style={{ paddingTop: '36px', paddingLeft: 0 }}>
+              <h2>{projectInfo.company[0].company_name}</h2>
+            </Container>
+          )}
+          <Container style={{ paddingTop: '18px', paddingLeft: 0 }}>
             <h2>{projectInfo.title}</h2>
             Date posted: {formatDate(projectInfo.date_posted)}
           </Container>
-          <Stack direction='row' style={{ paddingTop: 16 }}>
+
+          {session.user && session.user.role === 'prof' && (
+            <Stack direction='row' style={{ paddingTop: 16 }}>
+              <Box paddingTop='16px' paddingRight='16px'>
+                <AcceptProjectBtn
+                  projectInfo={projectInfo}
+                  closePopup={onClose}
+                />
+              </Box>
+              <Box paddingTop='16px'>
+                <Button
+                  disabled={submitting}
+                  type='submit'
+                  variant='outlined'
+                  style={{ borderRadius: '24px' }}
+                >
+                  Save Project
+                </Button>
+              </Box>
+            </Stack>
+          )}
+          {session.user && session.user.role === 'com' && (
             <Box paddingTop='16px' paddingRight='16px'>
               <Button
                 disabled={submitting}
-                onClick={acceptAction}
+                onClick={deleteAction}
                 type='submit'
                 variant='contained'
                 style={{ borderRadius: '24px' }}
               >
-                {submitting ? 'Accepting...' : 'Accept '}
+                {submitting ? 'Deleting...' : 'Delete Project'}
               </Button>
             </Box>
-            <Box paddingTop='16px'>
-              <Button
-                disabled={submitting}
-                type='submit'
-                variant='outlined'
-                style={{ borderRadius: '24px' }}
-              >
-                Save Project
-              </Button>
-            </Box>
-          </Stack>
+          )}
           <h3>Description:</h3>
           {projectInfo.description}
         </Box>
@@ -120,4 +140,4 @@ function AcceptProjectPopUp({ open, onClose, projectInfo }) {
   );
 }
 
-export default AcceptProjectPopUp;
+export default ProjectDetailPopup;

@@ -3,6 +3,7 @@ import client from './client';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 const { ObjectId } = require('mongodb'); // Import the ObjectId constructor
 
+
 export const getStudent = async ({ email }) => {
     try {
         await client.connect();
@@ -41,3 +42,4 @@ export const getStudentProject = async ({ _id }) => {
             await client.close();
         }
 };
+
