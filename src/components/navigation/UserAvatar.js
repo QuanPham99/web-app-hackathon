@@ -10,12 +10,15 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useState, useRef } from 'react';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import StringAvatar from '@/components/navigation/StringAvatar';
 
-function UserAvatar({ user, disableClick = false, avatarProps, ...props }) {
+function UserAvatar({ disableClick = false, avatarProps, ...props }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openPopover, setOpenPopover] = useState(false);
+  const { data: session } = useSession();
+
+  const user = session?.user;
 
   const closePopover = () => {
     setOpenPopover(false);
@@ -39,6 +42,7 @@ function UserAvatar({ user, disableClick = false, avatarProps, ...props }) {
     (user.role !== 'com'
       ? `${user.first_name} ${user.last_name}`
       : user.company_name);
+  console.log(user);
   return (
     user && (
       <>
