@@ -13,7 +13,7 @@ import React, { useState, useRef } from 'react';
 import { signOut } from 'next-auth/react';
 import StringAvatar from '@/components/navigation/StringAvatar';
 
-function UserAvatar({ user, ...props }) {
+function UserAvatar({ user, disableClick = false, avatarProps, ...props }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openPopover, setOpenPopover] = useState(false);
 
@@ -40,11 +40,19 @@ function UserAvatar({ user, ...props }) {
       : user.company_name;
   return (
     <>
-      <IconButton onClick={handleAvatarclick} aria-describedby={id}>
+      <IconButton
+        onClick={handleAvatarclick}
+        aria-describedby={id}
+        disabled={disableClick}
+      >
         {user.image_url && user.image_url !== '' ? (
-          <Avatar alt='User Avatar' src={user.image_url} />
+          <Avatar
+            alt='User Avatar'
+            src={user.image_url}
+            sx={{ ...avatarProps }}
+          />
         ) : (
-          <StringAvatar name={name} />
+          <StringAvatar name={name} sx={{ ...avatarProps }} />
         )}
       </IconButton>
 

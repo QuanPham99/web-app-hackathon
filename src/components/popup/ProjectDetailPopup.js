@@ -16,7 +16,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import AcceptProjectBtn from '@/components/buttons/AcceptProjectBtn';
 
-function AcceptProjectPopUp({ open, onClose, projectInfo }) {
+function ProjectDetailPopup({ open, onClose, projectInfo }) {
   const { data: session } = useSession();
 
   const router = useRouter();
@@ -138,4 +138,4 @@ function AcceptProjectPopUp({ open, onClose, projectInfo }) {
   );
 }
 
-export default AcceptProjectPopUp;
+export default ProjectDetailPopup;

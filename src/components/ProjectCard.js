@@ -15,7 +15,9 @@ import { HiOutlineBookmark } from 'react-icons/hi';
 import React, { useEffect } from 'react';
 import { formatDate } from '../utils';
 import { useState } from 'react';
-import AcceptProjectPopUp from './popup/ProjectDetailPopup';
+import ProjectDetailPopup from './popup/ProjectDetailPopup';
+import AssignStudentBtn from '@/components/buttons/AssignStudentBtn';
+
 const descriptionMaxLine = 3;
 
 function ProjectCard({ user, projectDetail }) {
@@ -101,17 +103,7 @@ function ProjectCard({ user, projectDetail }) {
                   direction={{ xs: 'column', sm: 'row' }}
                   spacing={{ xs: 1, sm: 2, md: 4 }}
                 >
-                  <Button
-                    variant='contained'
-                    sx={{
-                      textTransform: 'none',
-                      borderRadius: '24px',
-                      bgcolor: 'black',
-                      '&:hover': { bgcolor: 'rgb(80,80,80)' },
-                    }}
-                  >
-                    Assign Students
-                  </Button>
+                  <AssignStudentBtn />
                   <Button
                     variant='outlined'
                     sx={{
@@ -133,7 +125,7 @@ function ProjectCard({ user, projectDetail }) {
           )}
         </CardContent>
         {showModal && (
-          <AcceptProjectPopUp
+          <ProjectDetailPopup
             open={showModal}
             onClose={handleClose}
             projectInfo={data}
