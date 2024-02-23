@@ -25,12 +25,14 @@ export const getStudentProject = async ({ _id }) => {
     const project = client
       .db('User')
       .collection('Projects')
-      .find({ students_list: { $in: [new ObjectId(_id)] } });
+      .find({ students_list: { $in: [_id] } });
 
     const data = await project.toArray();
 
+    console.log('==== data', data);
     return { success: true, data: data };
   } catch (error) {
+    console.log(error);
     return { success: false, error };
   } finally {
     await client.close();
