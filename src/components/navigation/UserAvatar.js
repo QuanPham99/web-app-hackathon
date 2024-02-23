@@ -38,7 +38,6 @@ function UserAvatar({ user, ...props }) {
     user.role !== 'com'
       ? `${user.first_name} ${user.last_name}`
       : user.company_name;
-  console.log(user);
   return (
     <>
       <IconButton onClick={handleAvatarclick} aria-describedby={id}>

@@ -10,11 +10,14 @@ export const getAllProjects = async ({
   professor_id,
   queryOptions,
 }) => {
-
   try {
     await client.connect();
 
-    const query = { status, company_id, professor_id };
+    const query = {
+      status,
+      ...(company_id && { company_id }),
+      ...(professor_id && { professor_id }),
+    };
 
     // Other options for sorting and filter
     const options = { sort: { data_posted: -1 }, ...queryOptions };
@@ -32,23 +35,30 @@ export const getAllProjects = async ({
     await client.close();
   }
 };
-export const acceptProject = async (project_id, professor_id) => {
+export const acceptProject = async (
+  project_id,
+  professor_id,
+  date_accepted
+) => {
   try {
     await client.connect();
 
     // Other options for sorting and filter
     // const options = { sort: { data_posted: -1 } };
-    await client
+    const res = await client
       .db('User')
       .collection('Projects')
       .updateOne(
-        { id: project_id },
+        { _id: new ObjectId(project_id) },
         {
-          $set: { professor_id: professor_id, status: 'accepted' },
+          $set: {
+            professor_id: professor_id,
+            status: 'accepted',
+            date_accepted,
+          },
           $currentDate: { lastModified: true },
         }
       );
-
     return { success: true };
   } catch (error) {
     return { success: false, error };

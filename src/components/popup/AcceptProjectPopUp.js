@@ -13,34 +13,40 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { formatDate } from '@/utils';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 function AcceptProjectPopUp({ open, onClose, projectInfo }) {
   const { data: session } = useSession();
+
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
-  //   console.log(projectInfo);
+
   const handleBackdropClick = (event) => {
     if (event.target === event.currentTarget) {
       // Only close the modal if backdrop is clicked directly, not its children
       onClose();
     }
   };
-  console.log(projectInfo._id);
+
   const acceptProject = async () => {
     try {
       const body = {
-        // TO DO: replace with real professor_id
         professor_id: session.user._id,
         project_id: projectInfo._id,
+        date_accepted: new Date().toDateString(),
       };
+
       const res = await fetch('/api/professor', {
         method: 'PUT',
         body: JSON.stringify({
           ...body,
         }),
       });
-      console.log(res);
+
+      if (res.ok) {
+        router.refresh();
+      }
     } catch (error) {
-      console.log(error);
+      toast.error(error);
     } finally {
       setSubmitting(false);
     }
