@@ -1,10 +1,16 @@
 'use client';
 import {
   Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
   FormControl,
+  IconButton,
   InputLabel,
   MenuItem,
-  Modal,
   Select,
   Stack,
   Typography,
@@ -12,6 +18,8 @@ import {
 import React, { useEffect, useState } from 'react';
 import UserAvatar from '../navigation/UserAvatar';
 import { toast } from 'react-toastify';
+import { DeleteOutlineOutlined } from '@mui/icons-material';
+import { useRouter } from 'next/navigation';
 
 const StudentOption = ({ student }) => {
   return (
@@ -26,15 +34,54 @@ const StudentOption = ({ student }) => {
   );
 };
 
-function StudentAssignmentPopup({ open, closePopup }) {
-  const [chosenId, setChosenId] = useState('');
+function StudentAssignmentPopup({ open, closePopup, project_id }) {
+  const router = useRouter();
   const [options, setOptions] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);
 
-  const handleChange = (event) => {
-    // const chosenStudent = options.filter((option) => option._id === event.target.)
+  const handleAssignStudent = (event) => {
+    const chosenStudent = options.filter(
+      (option) => option._id === event.target.value
+    )[0];
+
     // Remove the chosen student from the option
-    console.log('hello');
+    setOptions((prev) =>
+      prev.filter((option) => option._id !== chosenStudent._id)
+    );
+
+    // Keep track of the chosen students
+    setSelectedStudents((prev) => [...prev, chosenStudent]);
+  };
+
+  const handleRemoveStudent = (event) => {
+    const targetStudent = selectedStudents.filter(
+      (student) => student._id === event.currentTarget.value
+    )[0];
+
+    // Unassigned the student from the list of chosen ones
+    setSelectedStudents((prev) =>
+      prev.filter((student) => student._id !== targetStudent._id)
+    );
+
+    // Put back the unassigned student to options
+    setOptions((prev) => [...prev, targetStudent]);
+  };
+
+  const handleSaveClick = async () => {
+    const res = await fetch('/api/projects/assign', {
+      method: 'PUT',
+      body: JSON.stringify({
+        students_id: selectedStudents.map((student) => student._id),
+        project_id: project_id,
+      }),
+    });
+
+    if (!res.ok) {
+      throw res.error;
+    } else {
+      closePopup();
+      router.refresh();
+    }
   };
 
   useEffect(() => {
@@ -53,33 +100,47 @@ function StudentAssignmentPopup({ open, closePopup }) {
   }, []);
 
   return (
-    <Modal open={open} onClose={closePopup}>
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          bgcolor: 'background.paper',
-          boxShadow: 24,
-          paddingLeft: 4,
-          paddingRight: 4,
-          paddingBottom: 4,
-          paddingTop: 4,
-          width: 500,
-          height: 500,
-          overflowY: 'auto',
-          borderRadius: '8px',
-        }}
-      >
+    <Dialog
+      open={open}
+      onClose={closePopup}
+      fullWidth
+      maxWidth='md'
+      scroll='paper'
+      PaperProps={{ sx: { height: 600, px: 2 } }}
+    >
+      <DialogTitle>Assign Students</DialogTitle>
+      <DialogContent>
+        <Stack spacing={1} sx={{ marginBottom: 4 }}>
+          {selectedStudents &&
+            selectedStudents.map((student, index) => (
+              <Stack
+                key={index}
+                direction='row'
+                display='flex'
+                alignItems='center'
+                justifyContent='space-between'
+                sx={{
+                  borderRadius: '12px',
+                  px: 2,
+                  bgcolor: 'lightgray',
+                }}
+              >
+                <StudentOption student={student} />
+                <IconButton value={student._id} onClick={handleRemoveStudent}>
+                  <DeleteOutlineOutlined value={student._id} />
+                </IconButton>
+              </Stack>
+            ))}
+        </Stack>
+
         <FormControl fullWidth>
           <InputLabel id='student-select-label'>Add student</InputLabel>
           <Select
             labelId='student-select-label'
             id='student-select'
-            value={chosenId}
+            value={''}
             label='Add student'
-            onChange={handleChange}
+            onChange={handleAssignStudent}
           >
             {options?.length > 0 ? (
               options.map((student, index) => (
@@ -94,8 +155,21 @@ function StudentAssignmentPopup({ open, closePopup }) {
             )}
           </Select>
         </FormControl>
-      </Box>
-    </Modal>
+      </DialogContent>
+
+      <DialogActions>
+        <Button
+          variant='outlined'
+          onClick={closePopup}
+          sx={{ borderRadius: '24px' }}
+        >
+          Cancel
+        </Button>
+        <Button variant='contained' sx={{ borderRadius: '24px' }}>
+          Save
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
 

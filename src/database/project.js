@@ -64,6 +64,7 @@ export const getAllProjects = async ({
     await client.close();
   }
 };
+
 export const acceptProject = async (
   project_id,
   professor_id,
@@ -95,6 +96,7 @@ export const acceptProject = async (
     await client.close();
   }
 };
+
 export const deleteProject = async (project_id) => {
   try {
     await client.connect();
@@ -114,6 +116,7 @@ export const deleteProject = async (project_id) => {
     await client.close();
   }
 };
+
 
 // export const getAllProjects = async ({ status = 'posted' }) => {
 //   try {
@@ -137,3 +140,29 @@ export const deleteProject = async (project_id) => {
 //     await client.close();
 //   }
 // };
+
+export const updateStudentAssignment = async (project_id, student_ids) => {
+  try {
+    await client.connect();
+
+    // Other options for sorting and filter
+    // const options = { sort: { data_posted: -1 } };
+    const res = await client
+      .db('User')
+      .collection('Projects')
+      .updateOne(
+        { _id: new ObjectId(project_id) },
+        {
+          $set: {
+            students_list: student_ids,
+          },
+          $currentDate: { lastModified: true },
+        }
+      );
+    return { success: true };
+  } catch (error) {
+    return { success: false, error };
+  } finally {
+    await client.close();
+  }
+};

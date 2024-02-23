@@ -3,7 +3,7 @@ import { Button } from '@mui/material';
 import React, { useState } from 'react';
 import StudentAssignmentPopup from '../popup/StudentAssignmentPopup';
 
-function AssignStudentBtn() {
+function AssignStudentBtn({ project_id }) {
   const [open, setOpen] = useState(false);
 
   const closePopup = () => {
@@ -27,7 +27,11 @@ function AssignStudentBtn() {
       >
         Assign Student
       </Button>
-      <StudentAssignmentPopup closePopup={closePopup} open={open} />
+      <StudentAssignmentPopup
+        closePopup={closePopup}
+        open={open}
+        project_id={project_id}
+      />
     </div>
   );
 }
