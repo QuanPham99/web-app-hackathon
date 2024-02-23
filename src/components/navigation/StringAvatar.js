@@ -26,7 +26,7 @@ function StringAvatar({ name, sx, ...props }) {
   return (
     <Avatar {...props} sx={{ bgcolor: stringToColor(name), ...sx }}>{`${
       name.split(' ')[0][0]
-    }${name.split(' ')[1][0]}`}</Avatar>
+    }${name.split(' ')[1] ? name.split(' ')[1][0] : ''}`}</Avatar>
   );
 }
 

@@ -71,11 +71,14 @@ export default async function Home() {
           }}
         >
           <Image
-            src='/assets/programmer.jpg'
+            src='/assets/programmer.png'
             alt='Hero Section Image'
             width={600}
             height={600}
             quality={100}
+            style={{
+              borderRadius: '24px',
+            }}
           />
         </Grid>
       </Grid>
