@@ -42,7 +42,6 @@ function UserAvatar({ disableClick = false, avatarProps, ...props }) {
     (user.role !== 'com'
       ? `${user.first_name} ${user.last_name}`
       : user.company_name);
-  console.log(user);
   return (
     user && (
       <>

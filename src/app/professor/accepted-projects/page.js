@@ -5,7 +5,7 @@ import { React } from 'react';
 import FilterContainer from '@/components/filter/FilterContainer';
 import { getAllProjects } from '@/database/project';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions';
 import { Info } from '@mui/icons-material';
 
 const projectDetail = {

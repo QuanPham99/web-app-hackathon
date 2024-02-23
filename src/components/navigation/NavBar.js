@@ -10,7 +10,7 @@ import {
 import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 import UserAvatar from './UserAvatar';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions';
 import NavOption from '@/components/navigation/NavOption';
 import SignInBtn from './SignInBtn';
 
