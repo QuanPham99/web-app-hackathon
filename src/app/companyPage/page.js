@@ -43,15 +43,11 @@ const mock_projects = [projectDetail, projectDetail, projectDetail];
 
 const CompanyPage = async (props) => {
   const session = await getServerSession(authOptions);
-  console.log('Hello');
-  console.log(session.user);
   const { success, data } = await getProjectsByCompany({
     company_id: session?.user?._id,
   });
-  var projects = mock_projects;
-  if (success) {
-    projects = data;
-  }
+
+  const projects = data;
   return (
     <div style={{ width: '100%' }}>
       <Box sx={{ marginLeft: '300px' }}>

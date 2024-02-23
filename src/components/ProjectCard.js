@@ -34,9 +34,8 @@ function ProjectCard({ user, projectDetail }) {
     setData(projectDetail);
     setUserRole(user?.role);
   }, []);
-  console.log(user);
+
   return (
-    userRole &&
     data && (
       <Card sx={{ borderRadius: 8, p: 1 }} elevation={1}>
         <CardHeader

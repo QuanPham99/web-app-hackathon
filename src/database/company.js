@@ -16,6 +16,7 @@ export const getProjectsByCompany = async ({ company_id }) => {
       .find(query, options);
 
     const data = await projects.toArray();
+    console.log(data);
     return { success: true, data: data };
   } catch (error) {
     return { success: false, error };
