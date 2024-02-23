@@ -1,16 +1,18 @@
 import { NextResponse } from 'next/server';
 import { getStudentProject } from '../../../../database/student';
-// import { getServerSession } from 'next-auth';
-// import { authOptions } from '../auth/[...nextauth]/route';
 
 export async function GET(request) {
     // get the query parameters from the url
 
-    const { searchParams } =  await request.json();
-    console.log('hello' + searchParams)
-    const status = searchParams.get("_id");
+    const { searchParams } =  new URL(request.url);
+    const projectId = searchParams.get("_id");
+
+            // Check if projectId is null or undefined
+    if (!projectId) {
+      throw new Error("Project ID not provided");
+    }
     
-    const res = await getStudentProject({ _id: status });
+    const res = await getStudentProject({ _id: projectId });
 
     if (res.success) {
       return NextResponse.json({ data: res.data }, { status: 200 });

@@ -38,11 +38,14 @@ function ProfilePage() {
 
   const fetchStudentProject = async () => {
     try {
-      const body = {
-        _id: data._id
-      }
-      const res = await fetch('/api/students/project', {method: "GET", body: JSON.stringify({...body})});
-      
+      // const body = {
+      //   _id: data._id
+      // }
+      // const res = await fetch('/api/students/project', {method: "GET", body: JSON.stringify({...body})});
+      // Construct query string with _id parameter
+      const queryString = `?_id=${data._id}`;
+      // Send GET request with query string
+      const res = await fetch(`/api/students/project${queryString}`, { method: "GET" });
       if (!res.ok) {
         throw Error('Unknown Error');
       } else {

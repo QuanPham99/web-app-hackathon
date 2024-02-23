@@ -29,7 +29,7 @@ export const getStudentProject = async ({ _id }) => {
             .db('User')
             .collection('Projects')
             .find(
-                {'students_list': {$all: [new ObjectId(_id)]}}
+                {'students_list': {$in: [new ObjectId(_id)]}}
             );
 
             return { success: true, data: project};
