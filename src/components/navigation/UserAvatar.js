@@ -34,14 +34,18 @@ function UserAvatar({ user, ...props }) {
   };
 
   const id = openPopover ? 'account-popover' : undefined;
-
+  const name =
+    user.role !== 'com'
+      ? `${user.first_name} ${user.last_name}`
+      : user.company_name;
+  console.log(user);
   return (
     <>
       <IconButton onClick={handleAvatarclick} aria-describedby={id}>
         {user.image_url && user.image_url !== '' ? (
           <Avatar alt='User Avatar' src={user.image_url} />
         ) : (
-          <StringAvatar name={`${user.first_name} ${user.last_name}`} />
+          <StringAvatar name={name} />
         )}
       </IconButton>
 
