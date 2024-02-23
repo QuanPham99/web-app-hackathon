@@ -8,11 +8,6 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { Info } from '@mui/icons-material';
 
-const mockProfuser = {
-  last_name: 'Doe',
-  first_name: 'Jone',
-  role: 'prof',
-};
 const projectDetail = {
   company_name: 'Google',
   company_logo_url: '/assets/google_logo.png',
@@ -23,12 +18,11 @@ const projectDetail = {
 async function page() {
   const session = await getServerSession(authOptions);
 
-  const data = await getAllProjects({
+  const { data } = await getAllProjects({
     status: 'accepted',
     professor_id: session?.user?._id,
   });
 
-  console.log(data);
   return (
     <div style={{ width: '100%' }}>
       {data.length > 0 ? (
@@ -37,7 +31,7 @@ async function page() {
             {data.map((project, index) => (
               <ProjectCard
                 key={index}
-                projectDetail={{ ...project, ...projectDetail }}
+                projectDetail={{ ...project }}
                 user={session?.user}
               />
             ))}

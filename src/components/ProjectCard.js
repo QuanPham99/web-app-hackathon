@@ -12,86 +12,86 @@ import {
   Typography,
 } from '@mui/material';
 import { HiOutlineBookmark } from 'react-icons/hi';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { formatDate } from '../utils';
 import { useState } from 'react';
-import AcceptProjectPopUp from './popup/AcceptProjectPopUp';
+import ProjectDetailPopup from './popup/ProjectDetailPopup';
+import AssignStudentBtn from '@/components/buttons/AssignStudentBtn';
+
 const descriptionMaxLine = 3;
 
 function ProjectCard({ user, projectDetail }) {
+  const [data, setData] = useState(null);
+  const [userRole, setUserRole] = useState(null);
   const [showModal, setShowModal] = useState(false);
+
   const handleClose = (event, reason) => {
-    // console.log(reason);
     setShowModal(false);
   };
 
-  const popUp = (
-    <div>
-      <AcceptProjectPopUp
-        open={showModal}
-        onClose={handleClose}
-        projectInfo={projectDetail}
-      />
-    </div>
-  );
-  return (
-    <Card sx={{ borderRadius: 8, p: 1 }} elevation={1}>
-      <CardHeader
-        sx={{ mb: -3 }}
-        avatar={
-          <Avatar
-            src={projectDetail.company_logo_url}
-            alt={`${projectDetail.company_name}'s Logo`}
-          />
-        }
-        action={
-          <IconButton>
-            <HiOutlineBookmark style={{ color: 'black' }} />
-          </IconButton>
-        }
-        title={projectDetail.company_name}
-        titleTypographyProps={{ fontWeight: 500, fontSize: 24 }}
-      />
-      <CardActionArea
-        onClick={() => {
-          setShowModal(true);
+  useEffect(() => {
+    // Use useEffect to prvent hydration error when passing arguments
+    // from server(the page) to client (the component)
+    setData(projectDetail);
+    setUserRole(user?.role);
+  }, []);
 
-          console.log('Hello ');
-        }}
-      >
+  return (
+    data && (
+      <Card sx={{ borderRadius: 8, p: 1 }} elevation={1}>
+        <CardHeader
+          sx={{ mb: -3 }}
+          avatar={
+            <Avatar
+              src={data.company_logo_url}
+              alt={`${data.company_name}'s Logo`}
+            />
+          }
+          action={
+            <IconButton>
+              <HiOutlineBookmark style={{ color: 'black' }} />
+            </IconButton>
+          }
+          title={data.company_name}
+          titleTypographyProps={{ fontWeight: 500, fontSize: 24 }}
+        />
         <CardContent>
-          <Typography variant='h4'>{projectDetail.title}</Typography>
-          <Typography noWrap color='text.secondary' variant='body2'>
-            {user && user.role === 'prof' && projectDetail.status === 'accepted'
-              ? `Date accepted: ${formatDate(projectDetail.date_accepted)}`
-              : `Date posted: ${formatDate(projectDetail.date_posted)}`}{' '}
-            {projectDetail.topics &&
-              `| Topics: ${projectDetail.topics?.join(', ')}`}
-          </Typography>
-          <Typography sx={{ fontWeight: 'bold', mt: 2, fontSize: 16 }}>
-            Description:
-          </Typography>
-          <Typography
-            sx={{
-              fontSize: 14,
-              mt: 1,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              display: '-webkit-box',
-              WebkitLineClamp: `${descriptionMaxLine}`,
-              WebkitBoxOrient: 'vertical',
+          <CardActionArea
+            onClick={() => {
+              setShowModal(true);
             }}
           >
-            {projectDetail.description}
-          </Typography>
+            <Typography variant='h4'>{data.title}</Typography>
+            <Typography noWrap color='text.secondary' variant='body2'>
+              {userRole && userRole === 'prof' && data.status === 'accepted'
+                ? `Date accepted: ${formatDate(data.date_accepted)}`
+                : `Date posted: ${formatDate(data.date_posted)}`}{' '}
+              {data.topics && `| Topics: ${data.topics?.join(', ')}`}
+            </Typography>
+            <Typography sx={{ fontWeight: 'bold', mt: 2, fontSize: 16 }}>
+              Description:
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: 14,
+                mt: 1,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                display: '-webkit-box',
+                WebkitLineClamp: `${descriptionMaxLine}`,
+                WebkitBoxOrient: 'vertical',
+              }}
+            >
+              {data.description}
+            </Typography>
+          </CardActionArea>
 
-          {user && user.role === 'prof' && (
+          {userRole && userRole === 'prof' && (
             <Box sx={{ marginTop: 2 }}>
               <Stack spacing={1}>
-                {projectDetail.num_students &&
-                projectDetail.num_students > 0 ? (
+                {data.num_students && data.num_students > 0 ? (
                   <Typography sx={{ color: 'success.light' }}>
-                    Assigned to {projectDetail.num_students} students.
+                    Assigned to {data.num_students} students.
                   </Typography>
                 ) : (
                   <Typography sx={{ color: 'error.main' }}>
@@ -103,17 +103,7 @@ function ProjectCard({ user, projectDetail }) {
                   direction={{ xs: 'column', sm: 'row' }}
                   spacing={{ xs: 1, sm: 2, md: 4 }}
                 >
-                  <Button
-                    variant='contained'
-                    sx={{
-                      textTransform: 'none',
-                      borderRadius: '24px',
-                      bgcolor: 'black',
-                      '&:hover': { bgcolor: 'rgb(80,80,80)' },
-                    }}
-                  >
-                    Assign Students
-                  </Button>
+                  <AssignStudentBtn />
                   <Button
                     variant='outlined'
                     sx={{
@@ -134,9 +124,15 @@ function ProjectCard({ user, projectDetail }) {
             </Box>
           )}
         </CardContent>
-      </CardActionArea>
-      {showModal && popUp}
-    </Card>
+        {showModal && (
+          <ProjectDetailPopup
+            open={showModal}
+            onClose={handleClose}
+            projectInfo={data}
+          />
+        )}
+      </Card>
+    )
   );
 }
 
