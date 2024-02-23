@@ -15,7 +15,7 @@ import FilterContainer from '@/components/filter/FilterContainer';
 import ProjectStatusFilter from '@/components/filter/ProjectStatusFilter';
 import { getProjectsByCompany } from '../../database/company';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]/route';
+import { authOptions } from '../api/auth/[...nextauth]/authOptions';
 const projectDetail = {
   company_name: 'Google',
   company_logo_url: '/assets/google_logo.png',
