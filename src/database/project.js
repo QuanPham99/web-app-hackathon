@@ -22,16 +22,45 @@ export const getAllProjects = async ({
     // Other options for sorting and filter
     const options = { sort: { data_posted: -1 }, ...queryOptions };
 
-    const projects = client
-      .db('User')
-      .collection('Projects')
-      .find(query, options);
+    const pipeline = [
+      {
+        // Match all documents in the Projects collection
+        $match: { status: status },
+      },
+      {
+        // Convert company_id field from string to ObjectId
+        $addFields: {
+          company_id_obj: { $toObjectId: '$company_id' },
+        },
+      },
+      {
+        // Perform a lookup to retrieve company information based on company_id
+        $lookup: {
+          from: 'People', // Name of the Companies collection
+          localField: 'company_id_obj',
+          foreignField: '_id',
+          as: 'company',
+        },
+      },
+    ];
 
-    const data = await projects.toArray();
+    const cursor = client.db('User').collection('Projects').aggregate(pipeline);
+    const data = await cursor.toArray();
+
+    // Iterate over the cursor and log project names and associated company names
+    data.forEach((project) => {
+      const companyName =
+        project.company.length > 0
+          ? project.company[0].company_name
+          : 'Unknown';
+      // console.log(`Project: ${project.title}, Company: ${companyName}`);
+    });
     return { success: true, data: data };
   } catch (error) {
+    console.error('Error retrieving projects:', error);
     return { success: false, error };
   } finally {
+    // Close the connection
     await client.close();
   }
 };
@@ -87,6 +116,30 @@ export const deleteProject = async (project_id) => {
     await client.close();
   }
 };
+
+
+// export const getAllProjects = async ({ status = 'posted' }) => {
+//   try {
+//     await client.connect();
+
+//     const query = { status: status };
+
+//     // Other options for sorting and filter
+//     const options = { sort: { data_posted: -1 } };
+
+//     const projects = client
+//       .db('User')
+//       .collection('Projects')
+//       .find(query, options);
+
+//     const data = await projects.toArray();
+//     return { success: true, data: data };
+//   } catch (error) {
+//     return { success: false, error };
+//   } finally {
+//     await client.close();
+//   }
+// };
 
 export const updateStudentAssignment = async (project_id, student_ids) => {
   try {

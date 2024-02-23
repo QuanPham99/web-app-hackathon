@@ -18,7 +18,7 @@ import AcceptProjectBtn from '@/components/buttons/AcceptProjectBtn';
 
 function ProjectDetailPopup({ open, onClose, projectInfo }) {
   const { data: session } = useSession();
-
+  console.log(projectInfo);
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
 
@@ -91,8 +91,12 @@ function ProjectDetailPopup({ open, onClose, projectInfo }) {
           >
             <KeyboardBackspaceIcon />
           </IconButton>
-
-          <Container style={{ paddingTop: '36px', paddingLeft: 0 }}>
+          {session.user && session.user.role === 'prof' && (
+            <Container style={{ paddingTop: '36px', paddingLeft: 0 }}>
+              <h2>{projectInfo.company[0].company_name}</h2>
+            </Container>
+          )}
+          <Container style={{ paddingTop: '18px', paddingLeft: 0 }}>
             <h2>{projectInfo.title}</h2>
             Date posted: {formatDate(projectInfo.date_posted)}
           </Container>

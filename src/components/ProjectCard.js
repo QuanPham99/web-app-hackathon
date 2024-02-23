@@ -17,7 +17,7 @@ import { formatDate } from '../utils';
 import { useState } from 'react';
 import ProjectDetailPopup from './popup/ProjectDetailPopup';
 import AssignStudentBtn from '@/components/buttons/AssignStudentBtn';
-
+import UserAvatar from './navigation/UserAvatar';
 const descriptionMaxLine = 3;
 
 function ProjectCard({ user, projectDetail }) {
@@ -41,12 +41,7 @@ function ProjectCard({ user, projectDetail }) {
       <Card sx={{ borderRadius: 8, p: 1 }} elevation={1}>
         <CardHeader
           sx={{ mb: -3 }}
-          avatar={
-            <Avatar
-              src={data.company_logo_url}
-              alt={`${data.company_name}'s Logo`}
-            />
-          }
+          avatar={<UserAvatar user={projectDetail.company[0]} />}
           action={
             <IconButton>
               <HiOutlineBookmark style={{ color: 'black' }} />
