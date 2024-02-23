@@ -2,8 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Avatar, Typography, Container, Grid, Paper } from '@material-ui/core';
-import { getStudent } from '@/database/student';
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,42 +18,49 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ProfilePage() {
-
-  const [data, setData] = useState(null)
+  const [data, setData] = useState(null);
 
   const fetchStudentData = async () => {
-    const res = await fetch('/api/students', {method: 'GET'})
+    try {
+      const res = await fetch('/api/students', { method: 'GET' });
 
-    if (!res.ok) {
-      throw Error('Unknown Error')
-    } else {
-      setData(res.data)
+      if (!res.ok) {
+        throw Error('Unknown Error');
+      } else {
+        const jsonData = await res.json();
+        setData(jsonData.data);
+      }
+    } catch (error) {
     }
-  }
-  useEffect(()=>{
+  };
 
+  useEffect(() => {
     fetchStudentData();
-  }, [])
-  // const classes = useStyles();
+  }, []);
 
+  const classes = useStyles();
   return (
     <Container className={classes.root} maxWidth="md">
       <Paper className={classes.paper}>
         <Grid container spacing={3} alignItems="center" justifyContent="center">
           <Grid item xs={12} md={4} align="center">
             <Avatar alt="Profile Picture" src="profile.jpg" className={classes.avatar} />
-            <Typography variant="h6">Quan Pham</Typography>
-            <Typography variant="subtitle1" color="textSecondary">Software Engineer</Typography>
+            {data && (
+              <>
+                <Typography variant='h6'>{data.first_name} {data.last_name}</Typography>
+                <Typography variant="subtitle1" color="textSecondary">Software Engineer</Typography>
+              </>
+            )}
           </Grid>
           <Grid item xs={12} md={8}>
             <Typography variant="body1">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et leo vel magna pulvinar suscipit. Vivamus sit amet enim ultrices, fermentum purus et, commodo velit. Integer interdum vehicula ligula ut luctus.
             </Typography>
             <Typography variant="body1">
-              Email
+              Email: {data.email}
             </Typography> 
             <Typography variant="body1">
-              Current Projects
+              Current Projects: {data.current_proj};
             </Typography>  
           </Grid>
         </Grid>
@@ -65,3 +70,4 @@ function ProfilePage() {
 };
 
 export default ProfilePage;
+

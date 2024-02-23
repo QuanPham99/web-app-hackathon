@@ -5,17 +5,14 @@ export const getStudent = async ({ username = 'phamquan'}) => {
     try {
         await client.connect();
 
-        const query = { username : username};
+        const query = { username : username };
         
-        const options = { }
-
-        const student = client
+        const student = await client
             .db('User')
             .collection("People")
-            .find(query, options);
+            .findOne(query);
 
-        const data = await student.toArray();
-        return { success: true, data: data};
+        return { success: true, data: student};
     } catch (error) {
         return { success: false, error };
     } finally {

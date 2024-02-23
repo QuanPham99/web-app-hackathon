@@ -1,9 +1,11 @@
 import { NextResponse } from 'next/server';
 import { getStudent } from '../../../database/student';
+import { getServerSession } from 'next-auth';
 
 export async function GET(request) {
     // get the query parameters from the url
     const { searchParams } = new URL(request.url);
+    const session = await getServerSession(authOptions)
     const status = searchParams.get('status');
   
     const res = await getStudent({ status });
