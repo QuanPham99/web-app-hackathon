@@ -2,7 +2,7 @@
  * Helper functions for Project Entities
  */
 import client from './client';
-
+import { ObjectId } from 'mongodb';
 export const getAllProjects = async ({ status = 'posted' }) => {
   try {
     await client.connect();
@@ -44,6 +44,25 @@ export const acceptProject = async (project_id, professor_id) => {
 
     return { success: true };
   } catch (error) {
+    return { success: false, error };
+  } finally {
+    await client.close();
+  }
+};
+export const deleteProject = async (project_id) => {
+  try {
+    await client.connect();
+
+    // Other options for sorting and filter
+    // const options = { sort: { data_posted: -1 } };
+    await client
+      .db('User')
+      .collection('Projects')
+      .deleteOne({ _id: new ObjectId(project_id) });
+
+    return { success: true };
+  } catch (error) {
+    console.log(error);
     return { success: false, error };
   } finally {
     await client.close();

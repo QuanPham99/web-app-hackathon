@@ -12,10 +12,10 @@ import { useState } from 'react';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { formatDate } from '@/utils';
 import { useSession } from 'next-auth/react';
-
+import { useRouter } from 'next/navigation';
 function AcceptProjectPopUp({ open, onClose, projectInfo }) {
   const { data: session } = useSession();
-  //   console.log(session);
+  const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   //   console.log(projectInfo);
   const handleBackdropClick = (event) => {
@@ -24,13 +24,13 @@ function AcceptProjectPopUp({ open, onClose, projectInfo }) {
       onClose();
     }
   };
-
+  console.log(projectInfo._id);
   const acceptProject = async () => {
     try {
       const body = {
         // TO DO: replace with real professor_id
         professor_id: session.user._id,
-        project_id: projectInfo.id,
+        project_id: projectInfo._id,
       };
       const res = await fetch('/api/professor', {
         method: 'PUT',
@@ -46,9 +46,37 @@ function AcceptProjectPopUp({ open, onClose, projectInfo }) {
     }
   };
 
+  const deleteProject = async () => {
+    try {
+      const body = {
+        // TO DO: replace with real professor_id
+        project_id: projectInfo._id,
+      };
+      const res = await fetch('/api/projects', {
+        method: 'DELETE',
+        body: JSON.stringify({
+          ...body,
+        }),
+      });
+      if (res.ok) {
+        router.refresh();
+      }
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const acceptAction = async () => {
     setSubmitting(true);
     await acceptProject();
+    onClose();
+  };
+  const deleteAction = async () => {
+    setSubmitting(true);
+    await deleteProject();
     onClose();
   };
   return (
@@ -89,29 +117,44 @@ function AcceptProjectPopUp({ open, onClose, projectInfo }) {
             <h2>{projectInfo.title}</h2>
             Date posted: {formatDate(projectInfo.date_posted)}
           </Container>
-          <Stack direction='row' style={{ paddingTop: 16 }}>
+          {session.user && session.user.role === 'prof' && (
+            <Stack direction='row' style={{ paddingTop: 16 }}>
+              <Box paddingTop='16px' paddingRight='16px'>
+                <Button
+                  disabled={submitting}
+                  onClick={acceptAction}
+                  type='submit'
+                  variant='contained'
+                  style={{ borderRadius: '24px' }}
+                >
+                  {submitting ? 'Accepting...' : 'Accept '}
+                </Button>
+              </Box>
+              <Box paddingTop='16px'>
+                <Button
+                  disabled={submitting}
+                  type='submit'
+                  variant='outlined'
+                  style={{ borderRadius: '24px' }}
+                >
+                  Save Project
+                </Button>
+              </Box>
+            </Stack>
+          )}
+          {session.user && session.user.role === 'com' && (
             <Box paddingTop='16px' paddingRight='16px'>
               <Button
                 disabled={submitting}
-                onClick={acceptAction}
+                onClick={deleteAction}
                 type='submit'
                 variant='contained'
                 style={{ borderRadius: '24px' }}
               >
-                {submitting ? 'Accepting...' : 'Accept '}
+                {submitting ? 'Deleting...' : 'Delete Project'}
               </Button>
             </Box>
-            <Box paddingTop='16px'>
-              <Button
-                disabled={submitting}
-                type='submit'
-                variant='outlined'
-                style={{ borderRadius: '24px' }}
-              >
-                Save Project
-              </Button>
-            </Box>
-          </Stack>
+          )}
           <h3>Description:</h3>
           {projectInfo.description}
         </Box>
