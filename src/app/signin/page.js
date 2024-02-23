@@ -1,49 +1,93 @@
-"use client";
-import React from "react";
+'use client';
+import React, { useState } from 'react';
 import {
   Button,
   Typography,
   Avatar,
   TextField,
   Grid,
-  FormControlLabel,
-  Checkbox,
-  Link,
   Container,
-  ThemeProvider,
-  Paper,
-  CssBaseline,
-  Box,
-} from "@mui/material";
-import { LockOutlined } from "@mui/icons-material";
-import { pink, red, white, black } from "@mui/material/colors";
-import { createTheme } from "@mui/material";
-import styles from "./signin.module.css";
+} from '@mui/material';
+import { LockOutlined } from '@mui/icons-material';
+import styles from './signin.module.css';
+import Link from 'next/link';
+import { getSession, signIn } from 'next-auth/react';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 function SignInPage() {
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: "#FFFFFF",
-      },
-      secondary: {
-        main: red[500],
-      },
-    },
+  const router = useRouter();
+  const [submitting, setSubmitting] = useState(false);
+  const [credentials, setCredentials] = useState({
+    email: '',
+    password: '',
   });
+
+  const handleEmailChange = (event) => {
+    setCredentials((prev) => ({
+      ...prev,
+      email: event.target.value,
+    }));
+  };
+
+  const handlePasswordChange = (event) => {
+    setCredentials((prev) => ({
+      ...prev,
+      password: event.target.value,
+    }));
+  };
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    setSubmitting(true);
+    try {
+      const res = await signIn('credentials', {
+        ...credentials,
+        callbackUrl: '/',
+        redirect: false,
+      });
+
+      if (!res.ok) {
+        toast.error('User does not exist or password is incorrect.');
+      } else {
+        const session = await getSession();
+
+        // Redirect to home page
+        switch (session?.user?.role) {
+          case 'stud':
+            router.push('/student');
+            break;
+          case 'prof':
+            router.push('/professor');
+            break;
+          case 'com':
+            router.push('companyPage');
+            break;
+          default:
+            throw Error('Unknown user role.');
+        }
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className={styles.signin}>
       <Container>
         <center>
-          <Avatar style={{ backgroundColor: "red" }}>
+          <Avatar style={{ backgroundColor: 'black' }}>
             <LockOutlined />
           </Avatar>
         </center>
         <Typography component='h1' variant='h5'>
-          Sign in
+          Sign In
         </Typography>
-        <form className={styles.info_form}>
+        <form
+          className={styles.info_form}
+          onSubmit={handleFormSubmit}
+          method='POST'
+        >
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -51,12 +95,14 @@ function SignInPage() {
                 required
                 fullWidth
                 id='email'
-                label='Email Address'
+                label='Email'
                 name='email'
+                value={credentials.email}
+                onChange={handleEmailChange}
                 autoComplete='email'
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ marginBottom: '5%' }}>
               <TextField
                 variant='outlined'
                 required
@@ -65,42 +111,48 @@ function SignInPage() {
                 label='Password'
                 type='password'
                 id='password'
+                value={credentials.password}
+                onChange={handlePasswordChange}
                 autoComplete='current-password'
               />
             </Grid>
-            <Grid item xs={12} style={{ paddingBottom: "5%" }}>
+            {/* <Grid item xs={12} style={{ paddingBottom: '5%' }}>
               <FormControlLabel
                 control={<Checkbox color='primary' />}
                 label='Remember me'
               />
-            </Grid>
+            </Grid> */}
           </Grid>
-          <ThemeProvider theme={theme}>
-            <Button
-              type='submit'
-              fullWidth
-              variant='contained'
-              color='primary'
-              sx={{ border: "2px black solid", borderRadius: "24px" }}
-            >
-              Sign Up
-            </Button>
-          </ThemeProvider>
+
+          <Button
+            type='submit'
+            fullWidth
+            variant='contained'
+            color='primary'
+            disabled={submitting}
+            sx={{ border: '2px black solid', borderRadius: '24px' }}
+          >
+            {submitting ? 'Signing in...' : 'Sign in'}
+          </Button>
           <Grid
             container
             justify='flex-end'
-            style={{ paddingTop: "16px" }}
+            style={{ paddingTop: '16px' }}
             spacing={2}
           >
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <Link href='/' variant='body2'>
                 Forgot password?
               </Link>
-            </Grid>
+            </Grid> */}
             <Grid item xs={12}>
-              <Link href='/' variant='body2' display='flex-end'>
-                Don't have an account? Sign up here
-              </Link>
+              <Typography variant='body2'>
+                Don't have an account?{' '}
+                <Link href='/signup' style={{ display: 'inline-flex' }}>
+                  Sign up
+                </Link>{' '}
+                here
+              </Typography>
             </Grid>
           </Grid>
         </form>

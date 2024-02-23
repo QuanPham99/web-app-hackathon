@@ -1,10 +1,10 @@
-import { NextResponse } from "next/server";
-import { getAllProjects } from "../../../database/project";
-import { addProject } from "../../../database/company";
+import { NextResponse } from 'next/server';
+import { getAllProjects } from '../../../database/project';
+import { addProject } from '../../../database/company';
 export async function GET(request) {
   // get the query parameters from the url
   const { searchParams } = new URL(request.url);
-  const status = searchParams.get("status");
+  const status = searchParams.get('status');
 
   const res = await getAllProjects({ status });
 
