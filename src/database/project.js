@@ -3,14 +3,19 @@
  */
 import client from './client';
 
-export const getAllProjects = async ({ status = 'posted' }) => {
+export const getAllProjects = async ({
+  status = 'posted',
+  company_id,
+  professor_id,
+  queryOptions,
+}) => {
   try {
     await client.connect();
 
-    const query = { status: status };
+    const query = { status, company_id, professor_id };
 
     // Other options for sorting and filter
-    const options = { sort: { data_posted: -1 } };
+    const options = { sort: { data_posted: -1 }, ...queryOptions };
 
     const projects = client
       .db('User')
