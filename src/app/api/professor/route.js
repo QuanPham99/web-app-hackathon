@@ -5,7 +5,7 @@ export async function PUT(request) {
   // get the query parameters from the url
   // console.log(request);
   const body = await request.json();
-  console.log(body);
+  // console.log(body);
   const result = await acceptProject(body.project_id, body.professor_id);
 
   if (result.success) {
