@@ -1,24 +1,43 @@
 import { MongoClient } from 'mongodb';
 import client from './client';
 
-export const getStudent = async ({ username = 'posted '}) => {
-    try {
-        await client.connect();
+export const getStudent = async ({ username = 'posted ' }) => {
+  try {
+    await client.connect();
 
-        const query = { username : username};
-        
-        const options = { }
+    const query = { username: username };
 
-        const student = client
-            .db('User')
-            .collection("People")
-            .find(query, options);
+    const options = {};
 
-        const data = await student.toArray();
-        return { success: true, data: data};
-    } catch (error) {
-        return { success: false, error };
-    } finally {
-        await client.close();
-    }
+    const student = client.db('User').collection('People').find(query, options);
+
+    const data = await student.toArray();
+    return { success: true, data: data };
+  } catch (error) {
+    return { success: false, error };
+  } finally {
+    await client.close();
+  }
+};
+
+export const getAllStudents = async () => {
+  try {
+    await client.connect();
+
+    const query = { role: 'stud' };
+
+    const options = {};
+
+    const students = client
+      .db('User')
+      .collection('People')
+      .find(query, options);
+
+    const data = await students.toArray();
+    return { success: true, data: data };
+  } catch (error) {
+    return { success: false, error };
+  } finally {
+    await client.close();
+  }
 };
