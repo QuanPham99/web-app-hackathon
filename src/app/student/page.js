@@ -44,7 +44,7 @@ function ProfilePage() {
     fetchStudentData();
   }, []);
 
-  const classes = useStyles();
+  // const classes = useStyles();
   return (
     data && (
       <Container maxWidth='md'>
@@ -59,7 +59,7 @@ function ProfilePage() {
               <Avatar
                 alt='Profile Picture'
                 src='profile.jpg'
-                className={classes.avatar}
+                // className={classes.avatar}
               />
               <Typography variant='h6'>
                 {data.first_name} {data.last_name}
