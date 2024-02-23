@@ -59,7 +59,6 @@ function AddProjectPopUp({ open, onClose, company }) {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     setSubmitting(true);
-    console.log(projectInfo);
     await addProjectToDatabase();
     onClose();
   };

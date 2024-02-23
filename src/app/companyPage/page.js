@@ -61,7 +61,10 @@ const CompanyPage = async (props) => {
               key={index}
               projectDetail={{
                 ...project,
-                ...{ company_name: session.user.company_name },
+                ...{
+                  company_name: session.user.company_name,
+                  role: session.user.role,
+                },
               }}
             />
           ))}

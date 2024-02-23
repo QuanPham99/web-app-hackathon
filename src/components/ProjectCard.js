@@ -52,7 +52,11 @@ function ProjectCard({ user, projectDetail }) {
               <HiOutlineBookmark style={{ color: 'black' }} />
             </IconButton>
           }
-          title={data.company_name}
+          title={
+            data && data.company
+              ? data.company[0].company_name
+              : data.company_name
+          }
           titleTypographyProps={{ fontWeight: 500, fontSize: 24 }}
         />
         <CardContent>
@@ -103,7 +107,7 @@ function ProjectCard({ user, projectDetail }) {
                   direction={{ xs: 'column', sm: 'row' }}
                   spacing={{ xs: 1, sm: 2, md: 4 }}
                 >
-                  <AssignStudentBtn />
+                  <AssignStudentBtn project_id={data._id} />
                   <Button
                     variant='outlined'
                     sx={{

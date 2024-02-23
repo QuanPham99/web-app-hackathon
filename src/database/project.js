@@ -13,24 +13,23 @@ export const getAllProjects = async ({
   try {
     await client.connect();
 
-    const query = {
-      status,
-      ...(company_id && { company_id }),
-      ...(professor_id && { professor_id }),
-    };
-
     // Other options for sorting and filter
     const options = { sort: { data_posted: -1 }, ...queryOptions };
 
     const pipeline = [
       {
         // Match all documents in the Projects collection
-        $match: { status: status },
+        $match: {
+          status: status,
+          ...(company_id && { company_id }),
+          ...(professor_id && { professor_id }),
+        },
       },
       {
         // Convert company_id field from string to ObjectId
         $addFields: {
           company_id_obj: { $toObjectId: '$company_id' },
+          num_students: { $size: { $ifNull: ['$students_list', []] } },
         },
       },
       {
@@ -64,6 +63,7 @@ export const getAllProjects = async ({
     await client.close();
   }
 };
+
 export const acceptProject = async (
   project_id,
   professor_id,
@@ -95,6 +95,7 @@ export const acceptProject = async (
     await client.close();
   }
 };
+
 export const deleteProject = async (project_id) => {
   try {
     await client.connect();
@@ -137,3 +138,30 @@ export const deleteProject = async (project_id) => {
 //     await client.close();
 //   }
 // };
+
+export const updateStudentAssignment = async (project_id, student_ids) => {
+  try {
+    await client.connect();
+
+    console.log('ids', student_ids);
+    // Other options for sorting and filter
+    // const options = { sort: { data_posted: -1 } };
+    const res = await client
+      .db('User')
+      .collection('Projects')
+      .updateOne(
+        { _id: new ObjectId(project_id) },
+        {
+          $set: {
+            students_list: student_ids,
+          },
+          $currentDate: { lastModified: true },
+        }
+      );
+    return { success: true };
+  } catch (error) {
+    return { success: false, error };
+  } finally {
+    await client.close();
+  }
+};
