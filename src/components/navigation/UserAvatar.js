@@ -73,7 +73,9 @@ function UserAvatar({ disableClick = false, avatarProps, ...props }) {
           <Box sx={{ py: 1.5, px: 2 }}>
             <Typography variant='overline'>Account</Typography>
             <Typography variant='body2'>
-              {`${user.first_name} ${user.last_name}`}
+              {user.role !== 'com'
+                ? `${user.first_name} ${user.last_name}`
+                : user.company_name}
             </Typography>
           </Box>
           <Divider />
