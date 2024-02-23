@@ -32,7 +32,9 @@ export const getStudentProject = async ({ _id }) => {
                 {'students_list': {$in: [new ObjectId(_id)]}}
             );
 
-            return { success: true, data: project};
+        const data = await project.toArray();
+        
+            return { success: true, data: data};
         } catch (error) {
             return { success: false, error };
         } finally {

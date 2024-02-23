@@ -6,14 +6,8 @@ export async function GET(request) {
 
     const { searchParams } =  new URL(request.url);
     const projectId = searchParams.get("_id");
-
             // Check if projectId is null or undefined
-    if (!projectId) {
-      throw new Error("Project ID not provided");
-    }
-    
     const res = await getStudentProject({ _id: projectId });
-
     if (res.success) {
       return NextResponse.json({ data: res.data }, { status: 200 });
     } else {
