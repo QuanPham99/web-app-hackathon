@@ -6,6 +6,7 @@ export async function PUT(request) {
   const { project_id, professor_id, date_accepted } = await request.json();
   const result = await acceptProject(project_id, professor_id, date_accepted);
 
+
   if (result.success) {
     return NextResponse.json({}, { status: 200 });
   } else {
