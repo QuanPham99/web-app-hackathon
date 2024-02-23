@@ -103,7 +103,7 @@ function ProjectCard({ user, projectDetail }) {
                   direction={{ xs: 'column', sm: 'row' }}
                   spacing={{ xs: 1, sm: 2, md: 4 }}
                 >
-                  <AssignStudentBtn />
+                  <AssignStudentBtn project_id={data._id} />
                   <Button
                     variant='outlined'
                     sx={{
