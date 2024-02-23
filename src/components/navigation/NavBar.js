@@ -12,6 +12,7 @@ import { getServerSession } from 'next-auth';
 import UserAvatar from './UserAvatar';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import NavOption from '@/components/navigation/NavOption';
+import SignInBtn from './SignInBtn';
 
 async function NavBar({ navOptions = [], optionComponents = [] }) {
   const session = await getServerSession(authOptions);
@@ -41,26 +42,7 @@ async function NavBar({ navOptions = [], optionComponents = [] }) {
 
           {optionComponents}
 
-          {session?.user ? (
-            <UserAvatar user={session.user} />
-          ) : (
-            <Button
-              variant='contained'
-              sx={{
-                textTransform: 'none',
-                borderRadius: '24px',
-                width: '120px',
-                py: '8px',
-              }}
-              disableElevation
-            >
-              <Link href='/signin' style={{ textDecoration: 'none' }}>
-                <Typography fontWeight='bold' color='white'>
-                  Log In
-                </Typography>
-              </Link>
-            </Button>
-          )}
+          {session?.user ? <UserAvatar user={session.user} /> : <SignInBtn />}
         </Toolbar>
       </Container>
     </AppBar>

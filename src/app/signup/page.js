@@ -23,8 +23,8 @@ function SignUpPage() {
   const [submitting, setSubmitting] = useState(false);
 
   const [userInfo, setUserInfo] = useState({
-    firstName: undefined,
-    lastName: undefined,
+    first_name: undefined,
+    last_name: undefined,
     email: undefined,
     password: undefined,
     role: undefined,
@@ -89,11 +89,11 @@ function SignUpPage() {
             <Grid item xs={12} sm={6}>
               <TextField
                 autoComplete='fname'
-                name='firstName'
+                name='first_name'
                 variant='outlined'
                 required
                 fullWidth
-                id='firstName'
+                id='first_name'
                 label='First Name'
                 autoFocus
               />
@@ -103,9 +103,9 @@ function SignUpPage() {
                 variant='outlined'
                 required
                 fullWidth
-                id='lastName'
+                id='last_name'
                 label='Last Name'
-                name='lastName'
+                name='last_name'
                 autoComplete='lname'
               />
             </Grid>

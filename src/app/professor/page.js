@@ -1,6 +1,6 @@
 import ProjectCard from '@/components/ProjectCard';
 import ProjectFilter from '@/components/filter/ProjectFilter';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, CardActions, Stack, Typography } from '@mui/material';
 import { React } from 'react';
 import FilterContainer from '@/components/filter/FilterContainer';
 import { getAllProjects } from '@/database/project';
