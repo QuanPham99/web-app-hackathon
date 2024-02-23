@@ -1,9 +1,7 @@
-"use client";
-import React, { useState } from "react";
+// "use client";
+import React from "react";
 import NavBar from "@/components/navigation/NavBar";
-import { Button, ThemeProvider, createTheme, Box } from "@mui/material";
-import AddProjectPopUp from "../../components/popup/AddProjectPopUp";
-
+import AddButton from "../../components/buttons/AddButton";
 const companyNavOptions = [
   { name: "Current Projects", url: "/companyPage" },
   { name: "Professors", url: "/companyPage/associatedProfessors" },
@@ -24,46 +22,15 @@ const company = {
 export default function CompanyPageLayout(props) {
   props.params.company = company;
   //   console.log(props);
-  const [showModal, setShowModal] = useState(false);
-  const pageButton = () => {
-    return (
-      // <ThemeProvider theme={theme}>
-      <Box paddingRight='16px'>
-        <Button
-          onClick={() => {
-            setShowModal(true);
-            console.log(showModal);
-          }}
-          variant='contained'
-          style={{ borderRadius: "24px" }}
-        >
-          Add Project
-        </Button>
-      </Box>
-      // </ThemeProvider>
-    );
-  };
-  const handleClose = (event, reason) => {
-    // console.log(reason);
-    if (reason !== "backdropClick") {
-      setShowModal(false);
-    }
-  };
-  const popUp = (
-    <div>
-      {" "}
-      <AddProjectPopUp open={showModal} onClose={handleClose} />
-    </div>
-  );
+
   return (
     <div>
-      <NavBar navOptions={companyNavOptions} optionComponents={pageButton()} />
+      <NavBar navOptions={companyNavOptions} optionComponents={<AddButton />} />
 
       <div
         style={{ paddingRight: "24px", paddingLeft: "24px", marginTop: "16px" }}
       >
         {props.children}
-        {showModal && popUp}
       </div>
     </div>
   );

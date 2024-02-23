@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   AppBar,
   Box,
@@ -6,12 +6,13 @@ import {
   Container,
   Toolbar,
   Typography,
-} from "@mui/material";
-import Link from "next/link";
+} from '@mui/material';
+import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 import UserAvatar from './UserAvatar';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import NavOption from '@/components/navigation/NavOption';
+import SignInBtn from './SignInBtn';
 
 async function NavBar({ navOptions = [], optionComponents = [] }) {
   const session = await getServerSession(authOptions);
@@ -23,35 +24,25 @@ async function NavBar({ navOptions = [], optionComponents = [] }) {
           <Typography variant='body2' fontWeight='bold'>
             Logo
           </Typography>
-          <Typography sx={{ marginLeft: "8px" }} fontWeight='bold' variant='h6'>
+          <Typography sx={{ marginLeft: '8px' }} fontWeight='bold' variant='h6'>
             Web Name
           </Typography>
 
           <Box
             sx={{
               flexGrow: 1,
-              display: { xs: "none", md: "flex" },
-              justifyContent: "space-evenly",
+              display: { xs: 'none', md: 'flex' },
+              justifyContent: 'space-evenly',
             }}
           >
             {navOptions.map((option, index) => (
-              <Link
-                key={index}
-                href={option.url}
-                style={{
-                  textDecoration: "none",
-                  color: "black",
-                }}
-              >
-                <Typography variant='subtitle'>{option.name}</Typography>
-              </Link>
+              <NavOption key={index} option={option} />
             ))}
           </Box>
 
           {optionComponents}
-          <Avatar alt='Professor Avatar' sx={{ bgcolor: " black" }}>
-            P
-          </Avatar>
+
+          {session?.user ? <UserAvatar user={session.user} /> : <SignInBtn />}
         </Toolbar>
       </Container>
     </AppBar>

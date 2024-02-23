@@ -7,21 +7,28 @@ import {
   TextField,
   Grid,
   Container,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  FormHelperText,
 } from '@mui/material';
 import { LockOutlined } from '@mui/icons-material';
 import styles from './signup.module.css';
 import Link from 'next/link';
 import { hashPassword } from '@/utils';
 import { signIn } from 'next-auth/react';
+import { toast } from 'react-toastify';
 
 function SignUpPage() {
   const [submitting, setSubmitting] = useState(false);
 
   const [userInfo, setUserInfo] = useState({
-    firstName: undefined,
-    lastName: undefined,
+    first_name: undefined,
+    last_name: undefined,
     email: undefined,
     password: undefined,
+    role: undefined,
   });
 
   const handleChange = (event) => {
@@ -46,7 +53,7 @@ function SignUpPage() {
       });
 
       if (!res.ok) {
-        alert('User already exist');
+        toast.error('User already exist');
       } else {
         // User signing up successfully
         await signIn('credentials', {
@@ -80,58 +87,100 @@ function SignUpPage() {
           method='post'
         >
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete='fname'
-                name='firstName'
-                variant='outlined'
-                required
-                fullWidth
-                id='firstName'
-                label='First Name'
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant='outlined'
-                required
-                fullWidth
-                id='lastName'
-                label='Last Name'
-                name='lastName'
-                autoComplete='lname'
-              />
-            </Grid>
             <Grid item xs={12}>
-              <TextField
-                variant='outlined'
+              <FormControl
+                sx={{ width: '100%', marginBottom: userInfo.role ? '' : '5%' }}
                 required
-                fullWidth
-                id='email'
-                label='Email Address'
-                name='email'
-                autoComplete='email'
-              />
+              >
+                <InputLabel id='role-select-label'>Role</InputLabel>
+                <Select
+                  labelId='role-select-label'
+                  id='role-select'
+                  value={userInfo.role}
+                  label='Role'
+                  name='role'
+                  fullWidth
+                  onChange={handleChange}
+                >
+                  <MenuItem value='com'>Company</MenuItem>
+                  <MenuItem value='prof'>Professor</MenuItem>
+                  <MenuItem value='stud'>Student</MenuItem>
+                </Select>
+                {!userInfo.role && (
+                  <FormHelperText>
+                    Choose your role to get started
+                  </FormHelperText>
+                )}
+              </FormControl>
             </Grid>
-            <Grid item xs={12} sx={{ marginBottom: '5%' }}>
-              <TextField
-                variant='outlined'
-                required
-                fullWidth
-                name='password'
-                label='Password'
-                type='password'
-                id='password'
-                autoComplete='current-password'
-              />
-            </Grid>
-            {/* <Grid item xs={12} style={{ paddingBottom: '5%' }}>
-              <FormControlLabel
-                control={<Checkbox value='allowExtraEmails' color='primary' />}
-                label='I want to receive inspiration, marketing promotions and updates via email.'
-              />
-            </Grid> */}
+
+            {userInfo.role && (
+              <>
+                {userInfo.role !== 'com' ? (
+                  <>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        autoComplete='fname'
+                        name='first_name'
+                        variant='outlined'
+                        required
+                        fullWidth
+                        id='first_name'
+                        label='First Name'
+                        autoFocus
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        variant='outlined'
+                        required
+                        fullWidth
+                        id='last_name'
+                        label='Last Name'
+                        name='last_name'
+                        autoComplete='lname'
+                      />
+                    </Grid>
+                  </>
+                ) : (
+                  <Grid item xs={12} sm={12}>
+                    <TextField
+                      autoComplete='fname'
+                      name='company_name'
+                      variant='outlined'
+                      required
+                      fullWidth
+                      id='company_name'
+                      label='Company Name'
+                    />
+                  </Grid>
+                )}
+
+                <Grid item xs={12}>
+                  <TextField
+                    variant='outlined'
+                    required
+                    fullWidth
+                    id='email'
+                    label='Email Address'
+                    name='email'
+                    autoComplete='email'
+                  />
+                </Grid>
+                <Grid item xs={12} sx={{ marginBottom: '5%' }}>
+                  <TextField
+                    variant='outlined'
+                    required
+                    fullWidth
+                    name='password'
+                    label='Password'
+                    type='password'
+                    id='password'
+                    autoComplete='current-password'
+                  />
+                </Grid>
+              </>
+            )}
           </Grid>
           <Button
             type='submit'
@@ -140,7 +189,6 @@ function SignUpPage() {
             variant='contained'
             color='primary'
             sx={{ border: '2px black solid', borderRadius: '24px' }}
-            // style={{color:'white', backgroundColor:'black'}}
           >
             {submitting ? 'Signing up...' : 'Sign Up'}
           </Button>

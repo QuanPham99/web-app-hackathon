@@ -11,10 +11,12 @@ import {
 import { LockOutlined } from '@mui/icons-material';
 import styles from './signin.module.css';
 import Link from 'next/link';
-import { signIn } from 'next-auth/react';
-import { hashPassword } from '@/utils';
+import { getSession, signIn } from 'next-auth/react';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 function SignInPage() {
+  const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [credentials, setCredentials] = useState({
     email: '',
@@ -46,7 +48,24 @@ function SignInPage() {
       });
 
       if (!res.ok) {
-        alert('User does not exist or password is incorrect.');
+        toast.error('User does not exist or password is incorrect.');
+      } else {
+        const session = await getSession();
+
+        // Redirect to home page
+        switch (session?.user?.role) {
+          case 'stud':
+            router.push('/student');
+            break;
+          case 'prof':
+            router.push('/professor');
+            break;
+          case 'com':
+            router.push('companyPage');
+            break;
+          default:
+            throw Error('Unknown user role.');
+        }
       }
     } finally {
       setSubmitting(false);
@@ -61,8 +80,8 @@ function SignInPage() {
             <LockOutlined />
           </Avatar>
         </center>
-        <Typography component='h1' variant='h5' disabled={submitting}>
-          {submitting ? 'Signing in...' : 'Sign in'}
+        <Typography component='h1' variant='h5'>
+          Sign In
         </Typography>
         <form
           className={styles.info_form}
@@ -110,9 +129,10 @@ function SignInPage() {
             fullWidth
             variant='contained'
             color='primary'
+            disabled={submitting}
             sx={{ border: '2px black solid', borderRadius: '24px' }}
           >
-            Sign In
+            {submitting ? 'Signing in...' : 'Sign in'}
           </Button>
           <Grid
             container
