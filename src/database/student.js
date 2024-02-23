@@ -36,3 +36,25 @@ export const getStudentProject = async ({ _id }) => {
     await client.close();
   }
 };
+
+export const getAllStudents = async () => {
+  try {
+    await client.connect();
+
+    const query = { role: 'stud' };
+
+    const options = {};
+
+    const students = client
+      .db('User')
+      .collection('People')
+      .find(query, options);
+
+    const data = await students.toArray();
+    return { success: true, data: data };
+  } catch (error) {
+    return { success: false, error };
+  } finally {
+    await client.close();
+  }
+};

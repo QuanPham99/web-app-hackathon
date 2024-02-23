@@ -99,6 +99,8 @@ function StudentAssignmentPopup({ open, closePopup, project_id }) {
     fetchData();
   }, []);
 
+  console.log(options);
+
   return (
     <Dialog
       open={open}
