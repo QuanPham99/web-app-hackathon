@@ -18,45 +18,51 @@ const projectDetail = {
 async function page() {
   const session = await getServerSession(authOptions);
 
-  const { data } = await getAllProjects({
+  const { success, error, data } = await getAllProjects({
     status: 'accepted',
     professor_id: session?.user?._id,
   });
 
+  if (error) {
+    throw Error(error);
+  }
+
   return (
-    <div style={{ width: '100%' }}>
-      {data.length > 0 ? (
-        <Box sx={{ marginLeft: '300px' }}>
-          <Stack spacing={2}>
-            {data.map((project, index) => (
-              <ProjectCard
-                key={index}
-                projectDetail={{ ...project }}
-                user={session?.user}
-              />
-            ))}
+    success && (
+      <div style={{ width: '100%' }}>
+        {data.length > 0 ? (
+          <Box sx={{ marginLeft: '300px' }}>
+            <Stack spacing={2}>
+              {data.map((project, index) => (
+                <ProjectCard
+                  key={index}
+                  projectDetail={{ ...project }}
+                  user={session?.user}
+                />
+              ))}
+            </Stack>
+            <FilterContainer>
+              <ProjectFilter title='Topic' isMultiChoice={true} />
+              <ProjectFilter title='Company' />
+            </FilterContainer>
+          </Box>
+        ) : (
+          <Stack
+            direction='row'
+            spacing={1}
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              marginTop: 12,
+              color: 'grey',
+            }}
+          >
+            <Info />
+            <Typography>No projects accepted.</Typography>
           </Stack>
-          <FilterContainer>
-            <ProjectFilter title='Topic' isMultiChoice={true} />
-            <ProjectFilter title='Company' />
-          </FilterContainer>
-        </Box>
-      ) : (
-        <Stack
-          direction='row'
-          spacing={1}
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            marginTop: 12,
-            color: 'grey',
-          }}
-        >
-          <Info />
-          <Typography>No projects accepted.</Typography>
-        </Stack>
-      )}
-    </div>
+        )}
+      </div>
+    )
   );
 }
 

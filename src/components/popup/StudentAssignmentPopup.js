@@ -71,7 +71,7 @@ function StudentAssignmentPopup({ open, closePopup, project_id }) {
     const res = await fetch('/api/projects/assign', {
       method: 'PUT',
       body: JSON.stringify({
-        students_id: selectedStudents.map((student) => student._id),
+        student_ids: selectedStudents.map((student) => student._id),
         project_id: project_id,
       }),
     });
@@ -80,7 +80,7 @@ function StudentAssignmentPopup({ open, closePopup, project_id }) {
       throw res.error;
     } else {
       closePopup();
-      router.refresh();
+      window.location.reload();
     }
   };
 
@@ -161,11 +161,15 @@ function StudentAssignmentPopup({ open, closePopup, project_id }) {
         <Button
           variant='outlined'
           onClick={closePopup}
-          sx={{ borderRadius: '24px' }}
+          sx={{ borderRadius: '24px', width: '90px' }}
         >
           Cancel
         </Button>
-        <Button variant='contained' sx={{ borderRadius: '24px' }}>
+        <Button
+          variant='contained'
+          sx={{ borderRadius: '24px', width: '90px' }}
+          onClick={handleSaveClick}
+        >
           Save
         </Button>
       </DialogActions>

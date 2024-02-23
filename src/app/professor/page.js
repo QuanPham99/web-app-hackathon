@@ -6,12 +6,6 @@ import FilterContainer from '@/components/filter/FilterContainer';
 import { getAllProjects } from '@/database/project';
 import { Info, ReportProblem } from '@mui/icons-material';
 
-const projectDetail = {
-  company_name: 'Google',
-  company_logo_url: '/assets/google_logo.png',
-  date_accepted: null,
-};
-
 async function Page() {
   const { success, data } = await getAllProjects({ status: 'posted' });
 
@@ -21,10 +15,7 @@ async function Page() {
         <Box sx={{ marginLeft: '300px' }}>
           <Stack spacing={2}>
             {data.map((project, index) => (
-              <ProjectCard
-                key={index}
-                projectDetail={{ ...project, ...projectDetail }}
-              />
+              <ProjectCard key={index} projectDetail={{ ...project }} />
             ))}
           </Stack>
         </Box>

@@ -13,24 +13,23 @@ export const getAllProjects = async ({
   try {
     await client.connect();
 
-    const query = {
-      status,
-      ...(company_id && { company_id }),
-      ...(professor_id && { professor_id }),
-    };
-
     // Other options for sorting and filter
     const options = { sort: { data_posted: -1 }, ...queryOptions };
 
     const pipeline = [
       {
         // Match all documents in the Projects collection
-        $match: { status: status },
+        $match: {
+          status: status,
+          ...(company_id && { company_id }),
+          ...(professor_id && { professor_id }),
+        },
       },
       {
         // Convert company_id field from string to ObjectId
         $addFields: {
           company_id_obj: { $toObjectId: '$company_id' },
+          num_students: { $size: { $ifNull: ['$students_list', []] } },
         },
       },
       {
@@ -117,7 +116,6 @@ export const deleteProject = async (project_id) => {
   }
 };
 
-
 // export const getAllProjects = async ({ status = 'posted' }) => {
 //   try {
 //     await client.connect();
@@ -145,6 +143,7 @@ export const updateStudentAssignment = async (project_id, student_ids) => {
   try {
     await client.connect();
 
+    console.log('ids', student_ids);
     // Other options for sorting and filter
     // const options = { sort: { data_posted: -1 } };
     const res = await client

@@ -18,7 +18,6 @@ import AcceptProjectBtn from '@/components/buttons/AcceptProjectBtn';
 
 function ProjectDetailPopup({ open, onClose, projectInfo }) {
   const { data: session } = useSession();
-  console.log(projectInfo);
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
 
@@ -44,7 +43,6 @@ function ProjectDetailPopup({ open, onClose, projectInfo }) {
       if (res.ok) {
         router.refresh();
       }
-      console.log(res);
     } catch (error) {
       console.log(error);
     } finally {

@@ -55,7 +55,16 @@ const CompanyPage = async (props) => {
       <Box sx={{ marginLeft: '300px' }}>
         <Stack spacing={2}>
           {projects.map((project, index) => (
-            <ProjectCard key={index} projectDetail={project} />
+            <ProjectCard
+              key={index}
+              projectDetail={{
+                ...project,
+                ...{
+                  company_name: session.user.company_name,
+                  role: session.user.role,
+                },
+              }}
+            />
           ))}
         </Stack>
       </Box>

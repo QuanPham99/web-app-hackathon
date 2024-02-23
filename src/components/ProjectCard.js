@@ -41,13 +41,23 @@ function ProjectCard({ user, projectDetail }) {
       <Card sx={{ borderRadius: 8, p: 1 }} elevation={1}>
         <CardHeader
           sx={{ mb: -3 }}
-          avatar={<UserAvatar user={projectDetail.company[0]} />}
+          avatar={
+            <UserAvatar
+              user={
+                projectDetail.company ? projectDetail.company[0] : projectDetail
+              }
+            />
+          }
           action={
             <IconButton>
               <HiOutlineBookmark style={{ color: 'black' }} />
             </IconButton>
           }
-          title={data.company_name}
+          title={
+            data && data.company
+              ? data.company[0].company_name
+              : data.company_name
+          }
           titleTypographyProps={{ fontWeight: 500, fontSize: 24 }}
         />
         <CardContent>
