@@ -24,7 +24,6 @@ function ProjectCard({ user, projectDetail }) {
   const [data, setData] = useState(null);
   const [userRole, setUserRole] = useState(null);
   const [showModal, setShowModal] = useState(false);
-
   const handleClose = (event, reason) => {
     setShowModal(false);
   };
@@ -41,7 +40,13 @@ function ProjectCard({ user, projectDetail }) {
       <Card sx={{ borderRadius: 8, p: 1 }} elevation={1}>
         <CardHeader
           sx={{ mb: -3 }}
-          avatar={<UserAvatar user={projectDetail.company[0]} />}
+          avatar={
+            <UserAvatar
+              user={
+                projectDetail.company ? projectDetail.company[0] : projectDetail
+              }
+            />
+          }
           action={
             <IconButton>
               <HiOutlineBookmark style={{ color: 'black' }} />
