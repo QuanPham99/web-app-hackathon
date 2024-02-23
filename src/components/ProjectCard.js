@@ -15,7 +15,7 @@ import { HiOutlineBookmark } from 'react-icons/hi';
 import React, { useEffect } from 'react';
 import { formatDate } from '../utils';
 import { useState } from 'react';
-import AcceptProjectPopUp from './popup/AcceptProjectPopUp';
+import AcceptProjectPopUp from './popup/ProjectDetailPopup';
 const descriptionMaxLine = 3;
 
 function ProjectCard({ user, projectDetail }) {

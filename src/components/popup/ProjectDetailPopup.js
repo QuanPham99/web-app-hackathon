@@ -14,6 +14,8 @@ import { formatDate } from '@/utils';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import AcceptProjectBtn from '@/components/buttons/AcceptProjectBtn';
+
 function AcceptProjectPopUp({ open, onClose, projectInfo }) {
   const { data: session } = useSession();
 
@@ -24,31 +26,6 @@ function AcceptProjectPopUp({ open, onClose, projectInfo }) {
     if (event.target === event.currentTarget) {
       // Only close the modal if backdrop is clicked directly, not its children
       onClose();
-    }
-  };
-
-  const acceptProject = async () => {
-    try {
-      const body = {
-        professor_id: session.user._id,
-        project_id: projectInfo._id,
-        date_accepted: new Date().toDateString(),
-      };
-
-      const res = await fetch('/api/professor', {
-        method: 'PUT',
-        body: JSON.stringify({
-          ...body,
-        }),
-      });
-
-      if (res.ok) {
-        router.refresh();
-      }
-    } catch (error) {
-      toast.error(error);
-    } finally {
-      setSubmitting(false);
     }
   };
 
@@ -75,11 +52,6 @@ function AcceptProjectPopUp({ open, onClose, projectInfo }) {
     }
   };
 
-  const acceptAction = async () => {
-    setSubmitting(true);
-    await acceptProject();
-    onClose();
-  };
   const deleteAction = async () => {
     setSubmitting(true);
     await deleteProject();
@@ -119,22 +91,19 @@ function AcceptProjectPopUp({ open, onClose, projectInfo }) {
           >
             <KeyboardBackspaceIcon />
           </IconButton>
+
           <Container style={{ paddingTop: '36px', paddingLeft: 0 }}>
             <h2>{projectInfo.title}</h2>
             Date posted: {formatDate(projectInfo.date_posted)}
           </Container>
+
           {session.user && session.user.role === 'prof' && (
             <Stack direction='row' style={{ paddingTop: 16 }}>
               <Box paddingTop='16px' paddingRight='16px'>
-                <Button
-                  disabled={submitting}
-                  onClick={acceptAction}
-                  type='submit'
-                  variant='contained'
-                  style={{ borderRadius: '24px' }}
-                >
-                  {submitting ? 'Accepting...' : 'Accept '}
-                </Button>
+                <AcceptProjectBtn
+                  projectInfo={projectInfo}
+                  closePopup={onClose}
+                />
               </Box>
               <Box paddingTop='16px'>
                 <Button
