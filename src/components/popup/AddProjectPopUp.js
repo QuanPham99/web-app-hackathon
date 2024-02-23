@@ -2,7 +2,12 @@ import React from 'react';
 import { Modal, Box, TextField, Button, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 function AddProjectPopUp({ open, onClose, company }) {
+  const router = useRouter();
+  const { data: session } = useSession();
+
   const [submitting, setSubmitting] = useState(false);
   const [projectInfo, setProjectInfo] = useState({
     title: undefined,
@@ -24,7 +29,7 @@ function AddProjectPopUp({ open, onClose, company }) {
     try {
       const body = {
         // TO DO: replace with real value
-        company_id: 'com_1',
+        company_id: session.user._id,
         description: projectInfo.description,
         title: projectInfo.title,
         professor_id: undefined,
@@ -32,13 +37,17 @@ function AddProjectPopUp({ open, onClose, company }) {
         date_posted: new Date(),
         topic: ['Demo'],
       };
+
       const res = await fetch('/api/projects', {
         method: 'POST',
         body: JSON.stringify({
           ...body,
         }),
       });
-      console.log(res);
+
+      if (res.ok) {
+        router.refresh();
+      }
     } catch (error) {
       console.log(error);
     } finally {

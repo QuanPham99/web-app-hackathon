@@ -14,6 +14,8 @@ import React from 'react';
 import FilterContainer from '@/components/filter/FilterContainer';
 import ProjectStatusFilter from '@/components/filter/ProjectStatusFilter';
 import { getProjectsByCompany } from '../../database/company';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../api/auth/[...nextauth]/route';
 const projectDetail = {
   company_name: 'Google',
   company_logo_url: '/assets/google_logo.png',
@@ -39,8 +41,10 @@ const company = {
 
 const mock_projects = [projectDetail, projectDetail, projectDetail];
 const CompanyPage = async (props) => {
+  const session = await getServerSession(authOptions);
+
   const { success, data } = await getProjectsByCompany({
-    company_id: company.id,
+    company_id: session?.user?._id,
   });
   var projects = mock_projects;
   if (success) {

@@ -11,21 +11,11 @@ import {
 import { useState } from 'react';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { formatDate } from '@/utils';
-// function formatDate(date) {
-//   // Get the month, day, and year from the Date object
-//   const month = date.getMonth() + 1; // Months are zero-based, so we add 1
-//   const day = date.getDate();
-//   const year = date.getFullYear();
-
-//   // Ensure that single-digit days and months are prefixed with a '0'
-//   const formattedMonth = month < 10 ? `0${month}` : month;
-//   const formattedDay = day < 10 ? `0${day}` : day;
-
-//   // Return the formatted date string
-//   return `${formattedMonth}/${formattedDay}/${year}`;
-// }
+import { useSession } from 'next-auth/react';
 
 function AcceptProjectPopUp({ open, onClose, projectInfo }) {
+  const { data: session } = useSession();
+  //   console.log(session);
   const [submitting, setSubmitting] = useState(false);
   //   console.log(projectInfo);
   const handleBackdropClick = (event) => {
@@ -39,7 +29,7 @@ function AcceptProjectPopUp({ open, onClose, projectInfo }) {
     try {
       const body = {
         // TO DO: replace with real professor_id
-        professor_id: 'prof_1',
+        professor_id: session.user._id,
         project_id: projectInfo.id,
       };
       const res = await fetch('/api/professor', {

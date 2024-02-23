@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import NavBar from '@/components/navigation/NavBar';
 import SignInBtn from '@/components/navigation/SignInBtn';
-
+import SessionProviderClient from '@/components/providers/SessionProviderClinet';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
@@ -19,19 +19,21 @@ export default function RootLayout({ children }) {
     <html lang='en'>
       <body className={inter.className}>
         <ThemeProviderClient>
-          <CssBaseline />
-          <main>
-            {children}
-            <ToastContainer
-              position='top-right'
-              autoClose={3000}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              theme='light'
-            />
-          </main>
+          <SessionProviderClient>
+            <CssBaseline />
+            <main>
+              {children}
+              <ToastContainer
+                position='top-right'
+                autoClose={3000}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                theme='light'
+              />
+            </main>
+          </SessionProviderClient>
         </ThemeProviderClient>
       </body>
     </html>
